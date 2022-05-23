@@ -1,0 +1,22 @@
+{
+  "name": "node-archgregator",
+  "version": "1.0.0",
+  "description": "A CRUD App for Archgregator (Archway chain data)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "build": "cd client && npm install && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@material-ui/icons": "^4.11.3",
+    "express": "^4.18.1",
+    "pg": "^8.7.3"
+  },
+  "engines": {
+    "node": "14.19.1"
+  }
+}

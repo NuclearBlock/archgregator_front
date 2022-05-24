@@ -42,7 +42,7 @@ const getGasToday = (request, response) => {
   })
 }
 const getRewardsToday = (request, response) => {    
-  pool.query('SELECT SUM(distributed_rewards_amount) as reward_today FROM contract_reward WHERE reward_date > now()::date - 1;', (error, results) => {
+  pool.query('SELECT SUM(distributed_rewards_amount) as rewards_today FROM contract_reward WHERE reward_date > now()::date - 1;', (error, results) => {
       if (error) {
           throw error
       }

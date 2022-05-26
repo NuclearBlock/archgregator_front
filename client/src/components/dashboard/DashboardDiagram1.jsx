@@ -6,6 +6,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const useStyles = makeStyles({
     root: {
@@ -55,7 +57,7 @@ const useStyles = makeStyles({
   
   
 
-  export default function DashboardDiagram1() {
+  export default function DashboardDiagram1({isLoading}) {
 
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
@@ -69,6 +71,9 @@ const useStyles = makeStyles({
             <Typography className={classes.title} color="Primary" gutterBottom>
                 REWARDS TYPE PERCENTAGE
             </Typography>
+
+            {isLoading && <div class="dashboard-progress"><CircularProgress size="4rem" /></div>} 
+
             <PieChart width={380} height={220}>
                 <Pie
                     data={data}

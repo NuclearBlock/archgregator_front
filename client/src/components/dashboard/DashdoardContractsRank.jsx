@@ -18,6 +18,8 @@ import { LinearProgress } from '@material-ui/core';
 
 import LaunchIcon from '@material-ui/icons/Launch';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 const useStyles = makeStyles({
   root: {
     minWidth: '100%',
@@ -26,11 +28,6 @@ const useStyles = makeStyles({
   card: {
     margin: '2px',
     height: '330px',
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
   },
   title: {
     fontSize: 14,
@@ -42,38 +39,41 @@ const useStyles = makeStyles({
 
   
 
-export default function DashdoardContractsRank() {
+export default function DashdoardContractsRank({data, isLoading}) {
 
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
 
-    const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
+    // const [data, setData] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true);
+    // const [isError, setIsError] = useState(false);
 
-    const fetchData = () => {
+    // const fetchData = () => {
+    //     let rewardsUrl = '/api/contracts/?limit=5'
+    //     fetch(rewardsUrl)
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //         setIsLoading(false);
+    //         setData(data);
+    //     })
+    //     .catch((error) => {
+    //         setIsLoading(false);
+    //         setIsError(true);
+    //         console.log(error);
+    //     });
+    // };
 
-        let rewardsUrl = '/api/contracts/?limit=5'
-        fetch(rewardsUrl)
-        .then((response) => response.json())
-        .then((data) => {
-            setIsLoading(false);
-            setData(data);
-        })
-        .catch((error) => {
-            setIsLoading(false);
-            setIsError(true);
-            console.log(error);
-        });
-    };
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    if (isLoading) {
-        return <div>Loading data...</div>;
-    }
+    // if (isLoading) {
+    //     return (
+    //       <div>
+    //         Loading data...
+    //         <CircularProgress />
+    //       </div>
+    //     );
+    // }
 
     return (
 <>
@@ -86,10 +86,14 @@ export default function DashdoardContractsRank() {
               # 
             </Typography>
 
-            <Table className={classes.table} size="small" aria-label="sticky table">
+            {isLoading && <div class="dashboard-progress"><CircularProgress size="4rem" /></div>} 
+            
+            {data.length > 0 && (
+              <>
+              <Table className={classes.table} size="small" aria-label="sticky table">
                 <TableHead>
-                    <TableRow size='small'>
-                      <TableCell>
+                    <TableRow>
+                      <TableCell width="10%">
                         #
                       </TableCell>
                       <TableCell>
@@ -104,26 +108,27 @@ export default function DashdoardContractsRank() {
                     {data
                     .map((item, i) => {
                         return (
-                        <TableRow key={item.id}>
-                            <TableCell>
-                                {i+1}
-                            </TableCell>
-                            <TableCell>
-                                {item.label?item.label:'Noname'}
-                            </TableCell>
-                            <TableCell align="right">
-                                {item.executed}
-                            </TableCell>
-                        </TableRow>
+                          <TableRow key={item.id}>
+                              <TableCell>
+                                  {i+1}
+                              </TableCell>
+                              <TableCell>
+                                  {item.label || 'Noname'}
+                              </TableCell>
+                              <TableCell align="right">
+                                  {item.executed}
+                              </TableCell>
+                          </TableRow>
                         );
                     })}
                 </TableBody>
-
               </Table>
 
-          <div className='dashboard-see-more'>
-            <Link to='/contracts'>See more&nbsp;<LaunchIcon fontSize="small"/></Link>
-          </div>
+              <div className='dashboard-see-more'>
+                <Link to='/contracts'>See more&nbsp;<LaunchIcon fontSize="small"/></Link>
+              </div>
+              </>
+            )}          
           
         </CardContent>
     </Card>

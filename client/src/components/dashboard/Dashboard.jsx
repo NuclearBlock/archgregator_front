@@ -5,16 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-
-import DashboardCard1 from './DashboardCard1';
-import DashboardCard2 from './DashboardCard2';
-import DashboardCard3 from './DashboardCard3';
-import DashboardCard4 from './DashboardCard4';
+import DashboardCard from './DashboardCard';
 import DashboardDiagram1 from './DashboardDiagram1';
 import DashdoardRewardsRank from './DashdoardRewardsRank';
 import DashdoardContractsRank from './DashdoardContractsRank';
@@ -58,63 +49,112 @@ export default function Dashboard() {
 
     const classes = useStyles();
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({
+        contractscount: [], 
+        developerscount: [],
+        gastoday: [],
+        rewardstoday: [],
+        rewardsleaders: [],
+        executionleaders: []
+    });
     const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState("");
 
     const fetchData = () => {
-        fetch('/api/info')
-        .then((response) => response.json())
-        .then((data) => {
+        setIsLoading(true);
+        Promise.all([
+            fetch('/api/contractscount'),
+            fetch('/api/developerscount'),
+            fetch('/api/gastoday'),
+            fetch('/api/rewardstoday'),
+            fetch('/api/rewards/?limit=5'),
+            fetch('/api/contracts/?limit=5'),
+        ])
+        .then(([res1, res2, res3, res4, res5, res6]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json()]))
+        .then(([data1, data2, data3, data4, data5, data6]) => {
             setIsLoading(false);
-            setData(data);
+            setData({
+                contractscount: data1, 
+                developerscount: data2,
+                gastoday: data3,
+                rewardstoday: data4,
+                rewardsleaders: data5,
+                executionleaders: data6,
+            });
         })
         .catch((error) => {
             setIsLoading(false);
-            setIsError(true);
+            setError(error.message);
             console.log(error);
         });
+
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     return (
         <>
         <Grid container item xs={12} spacing={0}>
             <Grid item xs={12} sm={3} spacing={0} >   
-                <DashboardCard1 />
+                <DashboardCard 
+                    title="TOTAL CONTRACTS"
+                    subtitle="total"
+                    progresslabel="active"
+                    data={data.contractscount}
+                    isLoading={isLoading}
+                />
             </Grid>
 
             <Grid item xs={12} sm={3} spacing={0} >
-                <DashboardCard2 />  
+                <DashboardCard 
+                    title="TOTAL DEVELOPERS"
+                    subtitle="total"
+                    progresslabel="active"
+                    data={data.developerscount}
+                    isLoading={isLoading}
+                />
             </Grid>
 
             <Grid item xs={12} sm={3} spacing={0} >
-                <DashboardCard3 />
+                <DashboardCard 
+                    title="GAS USED"
+                    subtitle="today"
+                    progresslabel="active"
+                    data={data.gastoday}
+                    isLoading={isLoading}
+                />
             </Grid>
 
             <Grid item xs={12} sm={3} spacing={0} >      
-                <DashboardCard4 />
+                <DashboardCard 
+                    title="REWARDS DISTRIBUTION"
+                    subtitle="today"
+                    progresslabel="active"
+                    data={data.rewardstoday}
+                    isLoading={isLoading}
+                />
             </Grid>
         </Grid>
 
         <Grid container item xs={12} spacing={0}>
             <Grid item xs={12} sm={4} spacing={0} >
-                <DashdoardRewardsRank />
+                <DashdoardRewardsRank 
+                    data={data.rewardsleaders}
+                    isLoading={isLoading}
+                />
             </Grid>
             <Grid item xs={12} sm={4} spacing={0} >
-                <DashdoardContractsRank />
+                <DashdoardContractsRank 
+                    data={data.executionleaders}
+                    isLoading={isLoading}
+                />
             </Grid>
 
             <Grid item xs={12} sm={4} spacing={0} >
                 {/* <DashdoardLiveRewards /> */}
-                <DashboardDiagram1 />
+                <DashboardDiagram1 isLoading={isLoading} />
             </Grid>
         </Grid>
 

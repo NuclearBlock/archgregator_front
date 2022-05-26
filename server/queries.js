@@ -18,7 +18,7 @@ const getSearch = (request, response) => {
 }
 
 const getContractsCount = (request, response) => {   
-    pool.query('SELECT COUNT(*) AS contracts_count FROM wasm_contract;', (error, results) => {
+    pool.query('SELECT COUNT(*) AS value FROM wasm_contract;', (error, results) => {
         if (error) {
             throw error
         }
@@ -26,7 +26,7 @@ const getContractsCount = (request, response) => {
     })
 }
 const getCountDevelopers = (request, response) => {    
-  pool.query('SELECT COUNT(developer_address) AS developers_count FROM contract_metadata;', (error, results) => {
+  pool.query('SELECT COUNT(developer_address) AS value FROM contract_metadata;', (error, results) => {
       if (error) {
           throw error
       }
@@ -34,7 +34,7 @@ const getCountDevelopers = (request, response) => {
   })
 }
 const getGasToday = (request, response) => {    
-  pool.query('SELECT SUM(gas_used) AS gas_today FROM wasm_execute_contract WHERE executed_at > now()::date - 1;', (error, results) => {
+  pool.query('SELECT SUM(gas_used) AS value FROM wasm_execute_contract WHERE executed_at > now()::date - 1;', (error, results) => {
       if (error) {
           throw error
       }
@@ -42,7 +42,7 @@ const getGasToday = (request, response) => {
   })
 }
 const getRewardsToday = (request, response) => {    
-  pool.query('SELECT SUM(distributed_rewards_amount) as rewards_today FROM contract_reward WHERE reward_date > now()::date - 1;', (error, results) => {
+  pool.query('SELECT SUM(distributed_rewards_amount) as value FROM contract_reward WHERE reward_date > now()::date - 1;', (error, results) => {
       if (error) {
           throw error
       }

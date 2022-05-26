@@ -210,6 +210,11 @@ footer .footer-icon {
   text-align: right;
 }
 
+.dashboard-progress {
+  text-align: center;
+  margin-top: 20%;
+}
+
 .dashboard-see-more a {
   color: #f1592a;
   text-decoration: none;

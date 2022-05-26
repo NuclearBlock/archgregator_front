@@ -43,38 +43,6 @@ export default function DashdoardContractsRank({data, isLoading}) {
 
     const classes = useStyles();
 
-    // const [data, setData] = useState([]);
-    // const [isLoading, setIsLoading] = useState(true);
-    // const [isError, setIsError] = useState(false);
-
-    // const fetchData = () => {
-    //     let rewardsUrl = '/api/contracts/?limit=5'
-    //     fetch(rewardsUrl)
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //         setIsLoading(false);
-    //         setData(data);
-    //     })
-    //     .catch((error) => {
-    //         setIsLoading(false);
-    //         setIsError(true);
-    //         console.log(error);
-    //     });
-    // };
-
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
-
-    // if (isLoading) {
-    //     return (
-    //       <div>
-    //         Loading data...
-    //         <CircularProgress />
-    //       </div>
-    //     );
-    // }
-
     return (
 <>
     <Card variant="outlined" square className={classes.card}>

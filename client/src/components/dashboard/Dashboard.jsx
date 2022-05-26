@@ -7,9 +7,10 @@ import Paper from '@material-ui/core/Paper';
 
 import DashboardCard from './DashboardCard';
 import DashboardDiagram1 from './DashboardDiagram1';
-import DashdoardRewardsRank from './DashdoardRewardsRank';
-import DashdoardContractsRank from './DashdoardContractsRank';
-import DashdoardChart from './DashdoardChart';
+import DashboardRewardsRank from './DashboardRewardsRank';
+import DashboardSubsidiesRank from './DashboardSubsidiesRank';
+import DashboardContractsRank from './DashboardContractsRank';
+import DashboardChart from './DashboardChart';
 
 import Helper from '../../utils/Helper'
 
@@ -55,7 +56,8 @@ export default function Dashboard() {
         gastoday: [],
         rewardstoday: [],
         rewardsleaders: [],
-        executionleaders: []
+        subsidiesleaders: [],
+        executionleaders: [],
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -67,11 +69,12 @@ export default function Dashboard() {
             fetch('/api/developerscount'),
             fetch('/api/gastoday'),
             fetch('/api/rewardstoday'),
-            fetch('/api/rewards/?limit=5'),
+            fetch('/api/rewards/?type=2&limit=5'),
+            fetch('/api/rewards/?type=3&limit=5'),
             fetch('/api/contracts/?limit=5'),
         ])
-        .then(([res1, res2, res3, res4, res5, res6]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json()]))
-        .then(([data1, data2, data3, data4, data5, data6]) => {
+        .then(([res1, res2, res3, res4, res5, res6, res7]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json(), res7.json()]))
+        .then(([data1, data2, data3, data4, data5, data6, data7]) => {
             setIsLoading(false);
             setData({
                 contractscount: data1, 
@@ -79,7 +82,8 @@ export default function Dashboard() {
                 gastoday: data3,
                 rewardstoday: data4,
                 rewardsleaders: data5,
-                executionleaders: data6,
+                subsidiesleaders: data6,
+                executionleaders: data7,
             });
         })
         .catch((error) => {
@@ -119,7 +123,7 @@ export default function Dashboard() {
 
             <Grid item xs={12} sm={3} spacing={0} >
                 <DashboardCard 
-                    title="GAS USED"
+                    title="CONTRACTS GAS"
                     subtitle="today"
                     progresslabel="active"
                     data={data.gastoday}
@@ -140,27 +144,29 @@ export default function Dashboard() {
 
         <Grid container item xs={12} spacing={0}>
             <Grid item xs={12} sm={4} spacing={0} >
-                <DashdoardRewardsRank 
+                <DashboardRewardsRank 
                     data={data.rewardsleaders}
                     isLoading={isLoading}
                 />
             </Grid>
             <Grid item xs={12} sm={4} spacing={0} >
-                <DashdoardContractsRank 
-                    data={data.executionleaders}
+                <DashboardSubsidiesRank 
+                    data={data.subsidiesleaders}
                     isLoading={isLoading}
                 />
             </Grid>
 
             <Grid item xs={12} sm={4} spacing={0} >
-                {/* <DashdoardLiveRewards /> */}
-                <DashboardDiagram1 isLoading={isLoading} />
+                <DashboardContractsRank 
+                    data={data.executionleaders}
+                    isLoading={isLoading}
+                />
             </Grid>
         </Grid>
 
         <Grid container item xs={12} spacing={0}>
             <Grid container sm={4} spacing={0} >
-
+                <DashboardDiagram1 isLoading={isLoading} />
             </Grid>
 
             <Grid container sm={4} spacing={0} >

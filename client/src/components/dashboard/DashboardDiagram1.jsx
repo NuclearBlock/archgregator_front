@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -33,14 +33,14 @@ const useStyles = makeStyles({
     },
   });
 
-  const data = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
-  ];
-  
-  const COLORS = ['#f1592a', '#cccccc', '#666666', '#FF8042'];
+
+  const convertData = input => {
+    const output = Object.entries(input).map(([name, value]) => ({name,value}));
+    // console.log(output);
+    return output;
+  }
+
+  const COLORS = ['#cccccc', '#f1592a', '#f7ab93',];
   
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
@@ -49,47 +49,58 @@ const useStyles = makeStyles({
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
   
     return (
-      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
+      <text x={x} y={y} fill="black" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${(percent * 100).toFixed(2)}%`}
       </text>
     );
   };
-  
-  
 
-  export default function DashboardDiagram1({isLoading}) {
+  export default function DashboardDiagram1({data, isLoading}) {
 
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
 
-  
+    const [state, setState] = useState({activeIndex: 0});
+
+    const onPieEnter = (_, index) => {
+      setState({activeIndex: index});
+    };
 
   return (
     <>
     <ResponsiveContainer width="100%" height="100%">
         <Card variant="outlined" square className={classes.card}>
             <Typography className={classes.title} color="Primary" gutterBottom>
-                REWARDS TYPE PERCENTAGE
+                REWARDS TYPE RATIO
             </Typography>
 
             {isLoading && <div class="dashboard-progress"><CircularProgress size="4rem" /></div>} 
 
-            <PieChart width={380} height={220}>
-                <Pie
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                >
-                {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-                </Pie>
-            </PieChart>
+            {data.length > 0 &&
+              <div>
+                <PieChart width={370} height={220}>
+                    <Pie
+                        data={convertData(data[0])}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={renderCustomizedLabel}
+                        innerRadius={60}
+                        outerRadius={100}
+                        fill="#cccccc"
+                        dataKey="value"
+                        onMouseEnter={onPieEnter}
+                    >
+                    {convertData(data[0]).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                    </Pie>
+                </PieChart>
+              
+                <div className="pie-premium"><span></span> Premium</div>
+                <div className="pie-subsidies"><span></span> Subsidized</div>
+              </div>
+            }
         </Card>  
       </ResponsiveContainer>
       

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
-import Paper from '@material-ui/core/Paper';
 
 import DashboardCard from './DashboardCard';
 import DashboardDiagram1 from './DashboardDiagram1';
@@ -43,9 +40,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-
-
 export default function Dashboard() {
 
     const classes = useStyles();
@@ -58,6 +52,8 @@ export default function Dashboard() {
         rewardsleaders: [],
         subsidiesleaders: [],
         executionleaders: [],
+        rewardsratio: [],
+        rewardschart: [],
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -72,9 +68,11 @@ export default function Dashboard() {
             fetch('/api/rewards/?type=2&limit=5'),
             fetch('/api/rewards/?type=3&limit=5'),
             fetch('/api/contracts/?limit=5'),
+            fetch('/api/rewardsratio'),
+            fetch('/api/rewardschart'),
         ])
-        .then(([res1, res2, res3, res4, res5, res6, res7]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json(), res7.json()]))
-        .then(([data1, data2, data3, data4, data5, data6, data7]) => {
+        .then(([res1, res2, res3, res4, res5, res6, res7, res8, res9]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json(), res7.json(), res8.json(), res9.json()]))
+        .then(([data1, data2, data3, data4, data5, data6, data7, data8, data9]) => {
             setIsLoading(false);
             setData({
                 contractscount: data1, 
@@ -84,6 +82,8 @@ export default function Dashboard() {
                 rewardsleaders: data5,
                 subsidiesleaders: data6,
                 executionleaders: data7,
+                rewardsratio: data8,
+                rewardschart: data9,
             });
         })
         .catch((error) => {
@@ -143,6 +143,15 @@ export default function Dashboard() {
         </Grid>
 
         <Grid container item xs={12} spacing={0}>
+            <Grid container sm={8} spacing={0} >
+                <DashboardChart data={data.rewardschart} isLoading={isLoading} />
+            </Grid>
+            <Grid container sm={4} spacing={0} >
+                <DashboardDiagram1 data={data.rewardsratio} isLoading={isLoading} />
+            </Grid>
+        </Grid>
+
+        <Grid container item xs={12} spacing={0}>
             <Grid item xs={12} sm={4} spacing={0} >
                 <DashboardRewardsRank 
                     data={data.rewardsleaders}
@@ -164,19 +173,7 @@ export default function Dashboard() {
             </Grid>
         </Grid>
 
-        <Grid container item xs={12} spacing={0}>
-            <Grid container sm={4} spacing={0} >
-                <DashboardDiagram1 isLoading={isLoading} />
-            </Grid>
-
-            <Grid container sm={4} spacing={0} >
-
-            </Grid>
-                
-            <Grid container sm={4} spacing={0} >
-
-            </Grid>
-        </Grid>
+        
 
         </>
 

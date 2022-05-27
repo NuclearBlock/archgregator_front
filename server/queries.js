@@ -194,6 +194,33 @@ const getContractMetadata = (request, response) => {
 
 }
 
+const getRewardsRatio = (request, response) => {
+  const queryStr = 'SELECT * FROM \
+    (SELECT SUM(contract_rewards_amount) AS standart FROM contract_reward WHERE collect_premium = false AND gas_rebate_to_user = false) T2, \
+    (SELECT SUM(contract_rewards_amount) AS premium FROM contract_reward WHERE collect_premium = true) T3, \
+    (SELECT SUM(contract_rewards_amount) AS subsidies FROM contract_reward WHERE gas_rebate_to_user = true) T4;'
+  
+    pool.query(queryStr, (error, results) => {
+    if (error) {
+    throw error
+    }
+    response.status(200).json(results.rows)
+  })
+
+}
+
+const getRewardsChart = (request, response) => {
+  const queryStr = "SELECT ROUND(SUM(contract_rewards_amount)::numeric, 2) AS amount, to_char(reward_date, 'mm/dd/YY') AS date FROM contract_reward WHERE reward_date > now()::date - 16 GROUP BY reward_date;";
+
+    pool.query(queryStr, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+
+}
+
 module.exports = {
     getSearch,
     getContractsCount,
@@ -208,5 +235,7 @@ module.exports = {
     getContractInfo,
     getContractMetadata,
     getContractExecutions,
+    getRewardsRatio,
+    getRewardsChart,
   }
 

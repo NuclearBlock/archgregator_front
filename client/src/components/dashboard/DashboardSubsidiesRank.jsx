@@ -16,48 +16,21 @@ import TableRow from '@material-ui/core/TableRow';
 import LaunchIcon from '@material-ui/icons/Launch';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const useStyles = makeStyles({
-  root: {
-    minWidth: '100%',
-    maxHeight: '150px',
-  },
-  card: {
-    margin: '2px',
-    height: '330px',
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
 
 export default function DashboardSubsidiesRank({data, isLoading}) {
 
-    const classes = useStyles();
-
     return (
-    <>
-    <Card variant="outlined" square className={classes.card}>
-        <CardContent>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                USER SUBSIDIES LEADERS
-            </Typography>
-            <Typography variant="body2" component="p">
-              # 
-            </Typography>
+        <div className="dashboard-leaders">
+
+            <div className='panel-title'>
+                Gas subsidies leaders
+            </div>
 
             {isLoading && <div class="dashboard-progress"><CircularProgress size="4rem" /></div>} 
 
             {data.length > 0 && (
               <>
-              <Table className={classes.table} size="small" aria-label="sticky table">
+              <Table size="small" aria-label="sticky table">
                   <TableHead>
                       <TableRow>
                         <TableCell width="10%">
@@ -97,10 +70,7 @@ export default function DashboardSubsidiesRank({data, isLoading}) {
               </>
             )}
 
-        </CardContent>
-    </Card>
-
-    </>
+        </div>
 
     );
 

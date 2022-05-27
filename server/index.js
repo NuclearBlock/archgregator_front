@@ -11,6 +11,12 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 // Search helper
 app.get('/api/search/:address', db.getSearch)
 
+// Get rewards chart
+app.get('/api/rewardschart', db.getRewardsChart)
+
+// Get rewards ratio
+app.get('/api/rewardsratio', db.getRewardsRatio)
+
 // Get contracts info for dashboard
 app.get('/api/contractscount', db.getContractsCount)
 

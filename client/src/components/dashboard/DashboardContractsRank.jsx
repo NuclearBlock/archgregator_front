@@ -44,16 +44,13 @@ export default function DashdoardContractsRank({data, isLoading}) {
     const classes = useStyles();
 
     return (
-<>
-    <Card variant="outlined" square className={classes.card}>
-        <CardContent>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-              MOST EXECUTABLE CONTRACTS
-            </Typography>
-            <Typography variant="body2" component="p">
-              # 
-            </Typography>
 
+        <div className="dashboard-leaders">
+
+            <div className='panel-title'>
+                MOST EXECUTABLE CONTRACTS
+            </div>
+              
             {isLoading && <div class="dashboard-progress"><CircularProgress size="4rem" /></div>} 
             
             {data.length > 0 && (
@@ -98,11 +95,7 @@ export default function DashdoardContractsRank({data, isLoading}) {
               </>
             )}          
           
-        </CardContent>
-    </Card>
-
-  
-    </>
+        </div>
 
     );
 

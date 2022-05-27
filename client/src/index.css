@@ -73,7 +73,7 @@ header {
 @media (min-width:641px)  {
   aside {
     /* position: fixed; */
-    height: calc(100% + 100px);
+    height: calc(100% + 160px);
     border: 1px solid #ddd;
     min-height: 100vh;
     width: 100%;
@@ -87,7 +87,7 @@ header {
 }
 
 footer {
-  margin-top: 30px;
+  margin-top: 40px;
   padding: 0 30px;
   text-align: right;
 }
@@ -205,6 +205,57 @@ footer .footer-icon {
   }
 }
 
+.panel {
+  border: 1px solid #ddd;
+  margin: 2px;
+  padding: 15px;
+}
+
+.dashboard-card {
+  border: 1px solid #ddd;
+  margin: 0 2px 2px 2px;
+  padding: 15px;
+  height: 100px;
+}
+
+.dashboard-leaders {
+  border: 1px solid #ddd;
+  margin: 2px;
+  padding: 15px;
+  height: 300px;
+}
+
+.dashboard-leaders .panel-title {
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  color: #ff5820;
+  font-size: 0.9rem;
+}
+
+
+.panel-title {
+  text-transform: uppercase;
+  /* color: #ff5820; */
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.panel-subtitle {
+  text-transform: uppercase;
+  /* color: #ff5820; */
+  color: #666;
+  font-size: 0.7rem;
+}
+
+
+.card-value {
+  margin: 10px 0;
+  color:#ff5820;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+
 .dashboard-see-more {
   padding: 15px 15px 0 0;
   text-align: right;
@@ -213,10 +264,36 @@ footer .footer-icon {
 .dashboard-progress {
   text-align: center;
   margin-top: 20%;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #999;
 }
 
 .dashboard-see-more a {
   color: #f1592a;
   text-decoration: none;
   font-size: 0.9rem;
+}
+
+.pie-premium, .pie-subsidies {
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.pie-premium span {
+  display: inline-block;
+  background-color: #ff5820;
+  width: 10px;
+  height: 10px;
+}
+
+.pie-subsidies span {
+  display: inline-block;
+  background-color: #f7ab93;
+  width: 10px;
+  height: 10px;
+}
+
+.recharts-cartesian-axis-tick-value {
+  font-size: 0.7rem;
 }

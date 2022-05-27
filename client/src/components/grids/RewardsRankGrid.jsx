@@ -89,10 +89,6 @@ export default function RewardsRankGrid() {
         setPage(0);
     };
 
-
-    
-
-    
     const [startDate, setStartDate] = useState(new Date(2022, 0, 1));
     const [endDate, setEndDate] = useState(new Date());
 
@@ -102,7 +98,6 @@ export default function RewardsRankGrid() {
     const handleEndDateChange = (date) => {
         setEndDate(date);
     };
-
 
 
     const [rewardsType, setRewardsType] = useState(1);
@@ -125,7 +120,9 @@ export default function RewardsRankGrid() {
         let apiUrl = '/api/rewards/?'
         
         apiUrl += 'type=' + rewardsType
-        apiUrl += '&premium=' + isPremium
+        if (!isPremium) {
+            apiUrl += '&premium=' + isPremium
+        }
 
         if (startDate) {
             apiUrl += '&startdate=' + startDate.toISOString()

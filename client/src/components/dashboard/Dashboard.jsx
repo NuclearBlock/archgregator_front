@@ -53,7 +53,7 @@ export default function Dashboard() {
         subsidiesleaders: [],
         executionleaders: [],
         rewardsratio: [],
-        rewardschart: [],
+        rewardschart: false,
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");

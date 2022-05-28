@@ -62,6 +62,6 @@ app.get('*', (request, response) => {
     response.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
   });
 
-app.listen(PORT, () => {
+app.listen(PORT, '127.0.0.1', () => {
   console.log(`Server listening on ${PORT}`);
 });

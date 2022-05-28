@@ -77,8 +77,8 @@ export default function SidePanel() {
         <aside>
         {/* <Grid item xs={12} sm={3} spacing={0} className={classes.sidepanel}> */}
             
-            <Paper square variant="outlined" className={classes.paper}>
-                <Grid container spacing={0} className={classes.sidepanel}>
+            {/* <Paper square variant="outlined" className={classes.paper}> */}
+                <Grid container spacing={0}>
                     <Grid item xs={3} sm={12} spacing={0}>
                         <Link component={RouterLink} to="/">
                             <RightTooltip title="Dashboard">
@@ -119,7 +119,7 @@ export default function SidePanel() {
                         </Link>
                     </Grid>
                 </Grid>
-            </Paper>
+            {/* </Paper> */}
         {/* </Grid> */}
         </aside>
 

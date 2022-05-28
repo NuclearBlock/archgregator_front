@@ -49,7 +49,7 @@ function App() {
             <Container maxWidth="lg">
                 {/* <div className="AppMain"> */}
                 <Grid container spacing={1}>
-                    <Grid item xs={12} sm={1} spacing={0}>
+                    <Grid item xs={12} sm={1} lg={1} spacing={0}>
                       <SidePanel />
                     </Grid>
                     <Grid item xs={12} sm={11} spacing={0}>

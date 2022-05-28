@@ -2,61 +2,56 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Container } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
-import { alpha, makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import SearchIcon from '@material-ui/icons/Search';
 import Grid from '@material-ui/core/Grid';
 
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import logo from '../logo.png'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-}));
 
 export default function Header() {
 
-    const classes = useStyles();
+    const navigate = useNavigate();
 
-    let navigate = useNavigate();
-    function goTo(url) {
-        console.log('navigate to : ' + url)
-        navigate(url, { replace: true });
-    }
-
-    const [searchString, setSearchString] = React.useState("");
-    const [searchResults, setSearchResults] = React.useState([]);
-
-    const handleSearch = event => {
-        //console.log(event.target.value)
-        setSearchString(event.target.value);
+    const handleClose = () => {
+        setOpen(false);
     };
 
-    const handleSearchClick = event => {
-        if (event.key === 'Enter') {
-            console.log(event.target.value)
+    const [open, setOpen] = React.useState(false);
+    const [searchString, setSearchString] = React.useState("");
+
+    const handleEsc = event => {
+        if (event.key === "Escape") {
+            setSearchString("");
         }
     };
 
-    useEffect(() => {
-        let apiUrl = '/api/search/' + searchString;
-        fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) => {
-            setSearchResults(data);
-        })
-    }, [searchString]);
+    const handleSearchResult = data => {
+        setSearchString("");
+        setOpen(false);
+        if (data[0]) {
+            let url = '/contracts/' + data[0].contract_address;
+            navigate(url, { replace: true });
+        } else {
+            navigate('not-found', { replace: true });
+        }
+    };
 
-    useEffect(() => {
-        console.log(searchResults)
-        if (searchResults[0]) {
-            let url = '/contracts/' + searchResults[0].contract_address;
-            console.log('url = ' + url);
-            goTo(url);
-        }     
-        
-    }, [searchResults]);
+    const handleSearchSubmit = event => {
+        event.preventDefault();
+        if (searchString) {
+            setOpen(!open);
+            let apiUrl = '/api/search/' + searchString;
+            fetch(apiUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                handleSearchResult(data);
+            })
+        }    
+    };
 
     return (
 
@@ -73,16 +68,19 @@ export default function Header() {
                     </Grid>   
 
                     <Grid item xs={8} sm={6}>
-                        <div className="search">
-                            <input 
-                                placeholder="Search by contract address"
-                                value={searchString}
-                                onChange={handleSearch}
-                                // onKeyUp={handleSearchClick}
-                            />
-                            <span className="search-icon">
-                                <SearchIcon fontSize="small"/>
-                            </span>
+                        <div id="search">
+                            <form onSubmit={handleSearchSubmit}>
+                                <input 
+                                    placeholder="Search by contract address"
+                                    value={searchString}
+                                    name="searchString"
+                                    onChange={(e) => setSearchString(e.target.value)}
+                                    onKeyUp={handleEsc}
+                                />
+                                <button id="search-button" type="submit">
+                                    <SearchIcon fontSize="small"/>
+                                </button>
+                        </form>    
                         </div>
                     </Grid>
 
@@ -92,6 +90,10 @@ export default function Header() {
 
                 </Grid>
             </Container>
+
+            <Backdrop open={open} onClick={handleClose}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
 
     </header>
   );

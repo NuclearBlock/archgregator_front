@@ -210,7 +210,7 @@ const getRewardsRatio = (request, response) => {
 }
 
 const getRewardsChart = (request, response) => {
-  const queryStr = "SELECT ROUND(SUM(contract_rewards_amount)::numeric, 2) AS amount, to_char(reward_date, 'mm/dd/YY') AS date FROM contract_reward WHERE reward_date > now()::date - 16 GROUP BY reward_date;";
+  const queryStr = "SELECT ROUND(SUM(contract_rewards_amount)::numeric, 2) AS amount, to_char(reward_date, 'mm/dd/YY') AS date FROM contract_reward WHERE reward_date > now()::date - 7 GROUP BY reward_date;";
 
     pool.query(queryStr, (error, results) => {
     if (error) {

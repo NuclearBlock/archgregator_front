@@ -19,24 +19,12 @@ import ContractInfoPage from './pages/ContractInfoPage'
 import CodesRankPage from './pages/CodesRankPage'
 import ContractsExecutionsPage from './pages/ContractExecutionsPage';
 import ContractRewardsPage from './pages/ContractRewardsPage';
+import TxPage from './pages/TxPage';
+import PageSearchNotFound from './pages/PageSearchNotFound';
 import Page404 from './pages/Page404';
-import TxPage from './pages/TxPage'
 
 import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-    main: {
-        minHeight: '90%',
-    }
-}));
 
 const theme = createTheme({
     palette: {
@@ -52,8 +40,6 @@ const theme = createTheme({
 
 function App() {
 
-   const classes = useStyles();
-
   return (
 
     <div className="App"> 
@@ -66,7 +52,7 @@ function App() {
                     <Grid item xs={12} sm={1} spacing={0}>
                       <SidePanel />
                     </Grid>
-                    <Grid item xs={12} sm={11} spacing={0} className={classes.main}>
+                    <Grid item xs={12} sm={11} spacing={0}>
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/rewards" element={<RewardsRankPage />} />
@@ -76,6 +62,7 @@ function App() {
                             <Route path="/codes" element={<CodesRankPage />} />
                             <Route path="/executions/:address" element={<ContractsExecutionsPage />} />
                             <Route path="/tx/:hash" element={<TxPage />} />
+                            <Route path="not-found" element={<PageSearchNotFound />} />
                             <Route path="*" element={<Page404 />} />
                         </Routes>
                     </Grid>
@@ -83,8 +70,7 @@ function App() {
                 {/* </div> */}
             </Container>
             <Footer />
-        </ThemeProvider>
-      
+        </ThemeProvider> 
     </div>
   );
 }

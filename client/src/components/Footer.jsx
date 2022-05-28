@@ -41,7 +41,7 @@ export default function Footer() {
                                 <TelegramIcon className={classes.icon}/>
                             </a>
 
-                            <a href="https://github.com" target="_blank" class="footer-icon">
+                            <a href="https://github.com/nuclearblock" target="_blank" class="footer-icon">
                                 <GitHubIcon className={classes.icon}/>
                             </a>
 

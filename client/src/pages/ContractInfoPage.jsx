@@ -1,81 +1,104 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useParams } from "react-router-dom";
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { useParams } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress'; 
 
-import ContractInfo from '../components/ContractInfo'
-import ContractExecutionsGrid from '../components/grids/ContractExecutionsGrid'
+import ContractInfoPanel from '../components/panels/ContractInfoPanel'
+import ContractMetadataPanel from '../components/panels/ContractMetadataPanel'
+import ContractExecutionsPanel from '../components/panels/ContractExecutionsPanel'
 import ContractRewardsPanel from '../components/panels/ContractRewardsPanel'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },  
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'left',
-        width: '100%',
-        maxWidth: '100%',
-        color: theme.palette.text.secondary,
-    },
-    arrow: {
-        color: theme.palette.common.black,
-    },
-    tooltip: {
-        fontSize: '1em',
-        backgroundColor: theme.palette.common.black,
-    },
-    table: {
-        width: '100%',
-        border: '',
-    },
-    tableContract: {
-        width: '70%',
-        border: '',
-    },
-}));
 
 function ContractInfoPage() {
 
-    const classes = useStyles();
-
     const params = useParams();
+
+    const [data, setData] = useState({
+        contractData: false, 
+        contractSummary: false,
+        contractMetaData: false,
+        contractRewards: [],
+        contractExecutions: [],
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const fetchData = () => {
+        setIsLoading(true);
+
+        Promise.all([
+            fetch(`/api/contracts/${params.address}`),
+            fetch(`/api/contractsummary/${params.address}`),
+            fetch(`/api/contracts/metadata/${params.address}`),
+            fetch(`/api/rewards/${params.address}/10`),
+            fetch(`/api/executions/${params.address}/10`),
+        ])
+        .then(([res1, res2, res3, res4, res5]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json()]))
+        .then(([data1, data2, data3, data4, data5]) => {
+            setIsLoading(false);
+            setData({
+                contractData: data1, 
+                contractSummary: data2,
+                contractMetaData: data3,
+                contractRewards: data4,
+                contractExecutions: data5,
+            });
+        })
+        .catch((error) => {
+            setIsLoading(false);
+            setError(error.message);
+            console.log(error);
+        });
+
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
     
-        <>
+        <div className="main">
+
             <Grid container spacing={0}>
-                <Grid  item xs={12} spacing={2}>
+                <Grid  item xs={12} spacing={0}>
                     <h1>Smart contract details</h1>
                     {params.address}
                     <br/><br/>
                 </Grid>
             </Grid>
 
-            <Grid container spacing={2} className={classes.root}>
-                <Grid  item sm={6} spacing={2} className={classes.root}>
-                    <ContractInfo/>
+            {/* {isLoading && <div className="progress-main"><CircularProgress size="4rem" /></div>}  */}
+            
+            <Grid container spacing={0}>
+
+                <Grid  item xs={12} spacing={0} >
+                    <ContractInfoPanel info={data.contractData} summary={data.contractSummary} isLoading={isLoading} />
                 </Grid>
 
-                <Grid  item sm={6} spacing={2} className={classes.root}>
-                    <Grid container spacing={0} className={classes.root}>
-                        <Grid  item xs={12} spacing={2} className={classes.root}>
-                            <ContractRewardsPanel/>
-                        </Grid> 
-                        <Grid  item xs={12} spacing={2} className={classes.root}>
-                            <ContractExecutionsGrid limit={10}/>
-                        </Grid> 
-                    </Grid> 
-                </Grid>   
             </Grid>
 
-            <Grid container spacing={0} className={classes.root}>
+            <Grid container spacing={0}>
+
+                <Grid  item xs={12} spacing={0} >
+                    <ContractMetadataPanel data={data.contractMetaData} isLoading={isLoading} />
+                </Grid>
+
+            </Grid>
+
+            <Grid container spacing={0} >
+
+                <Grid  item sm={6} spacing={0} >
+                    <ContractRewardsPanel data={data.contractRewards} isLoading={isLoading} />
+                </Grid> 
                 
+                <Grid  item sm={6} spacing={0} >
+                    <ContractExecutionsPanel data={data.contractExecutions} isLoading={isLoading} />
+                </Grid> 
+
             </Grid>
 
-        </>
+        </div>
     )
 };
 

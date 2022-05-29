@@ -231,10 +231,34 @@ footer .footer-icon {
   }
 }
 
+.main {
+  min-height: 90vh;
+}
+
+.progress-main {
+  margin: 15% auto;
+  text-align: center;
+}
+
 .panel {
   border: 1px solid #ddd;
   margin: 2px;
   padding: 15px;
+}
+
+.panel-title {
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  /* color: #ff5820; */
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.panel-subtitle {
+  text-transform: uppercase;
+  /* color: #ff5820; */
+  color: #666;
+  font-size: 0.7rem;
 }
 
 .dashboard-card {
@@ -259,24 +283,8 @@ footer .footer-icon {
   font-size: 0.9rem;
 }
 
-
-.panel-title {
-  text-transform: uppercase;
-  /* color: #ff5820; */
-  color: #333;
-  font-size: 0.9rem;
-}
-
-.panel-subtitle {
-  text-transform: uppercase;
-  /* color: #ff5820; */
-  color: #666;
-  font-size: 0.7rem;
-}
-
-
 .card-value {
-  margin: 10px 0;
+  margin: 0 0 10px 0;
   color:#ff5820;
   font-weight: 700;
   font-size: 1.8rem;
@@ -290,9 +298,15 @@ footer .footer-icon {
   color: #999;
 }
 
-.dashboard-see-more {
+.see-more {
   padding: 15px 15px 0 0;
   text-align: right;
+}
+
+.see-more a {
+  color: #f1592a;
+  text-decoration: none;
+  font-size: 0.9rem;
 }
 
 .dashboard-progress {
@@ -301,12 +315,6 @@ footer .footer-icon {
   font-size: 0.8rem;
   text-transform: uppercase;
   color: #999;
-}
-
-.dashboard-see-more a {
-  color: #f1592a;
-  text-decoration: none;
-  font-size: 0.9rem;
 }
 
 .pie-premium, .pie-subsidies {
@@ -341,4 +349,30 @@ footer .footer-icon {
   font-size: 4rem;
   text-transform: uppercase;
   opacity: 0.2;
+}
+
+.heigh100 {
+  min-height: 100%;
+}
+
+.right {
+  text-align: right;
+}
+
+
+.contract-card {
+  text-align: right;
+  margin: 5px 0;
+}
+
+.label {
+  text-transform: uppercase;
+  color: #666;
+  font-size: 0.7rem;
+}
+
+.value {
+  font-size: 1.7rem;
+  color: #ff5820;
+  font-weight: 700;
 }

@@ -170,12 +170,47 @@ const getContractExecutions = (request, response) => {
   })
 }
 
+const getContractExecutionsByPeriod = (request, response) => {
+
+  const limit = request.params.limit
+  if (!limit && limit > 10) {
+    limit = 10
+  }
+
+  const contractAddress = request.params.address
+  pool.query("SELECT to_char(executed_at::date, 'mm/dd/YY') AS date, count(tx_hash) AS executed FROM wasm_execute_contract WHERE contract_address = $1 GROUP BY executed_at::date ORDER BY date LIMIT $2;", [contractAddress, limit], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 const getContractInfo = (request, response) => {
   const contractAddress = request.params.address
 
   pool.query('SELECT * FROM wasm_contract WHERE contract_address = $1;', [contractAddress], (error, results) => {
     if (error) {
     throw error
+    }
+    response.status(200).json(results.rows)
+  })
+
+}
+
+
+const getContractSummary = (request, response) => {
+  const contractAddress = request.params.address
+
+  const queryStr = 'SELECT * FROM \
+  (SELECT COUNT(tx_hash) AS total_executed FROM wasm_execute_contract WHERE contract_address = $1) T1, \
+  (SELECT COUNT(DISTINCT sender) AS unique_executors FROM wasm_execute_contract WHERE contract_address = $1) T2, \
+  (SELECT ROUND(SUM(contract_rewards_amount)::numeric, 0) AS rewards_earned FROM contract_reward WHERE contract_address = $1 AND gas_rebate_to_user = false) T3, \
+  (SELECT ROUND(SUM(contract_rewards_amount)::numeric, 0) AS subsidized_fees FROM contract_reward WHERE contract_address = $1 AND gas_rebate_to_user = true) T4;'
+
+  pool.query(queryStr, [contractAddress], (error, results) => {
+    if (error) {
+      throw error
     }
     response.status(200).json(results.rows)
   })
@@ -233,8 +268,10 @@ module.exports = {
     getRewardsRank,
     getContractRewards,
     getContractInfo,
+    getContractSummary,
     getContractMetadata,
     getContractExecutions,
+    getContractExecutionsByPeriod,
     getRewardsRatio,
     getRewardsChart,
   }

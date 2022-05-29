@@ -58,7 +58,7 @@ export default function DashdoardRewardsRank({data, isLoading}) {
                   </TableBody>
               </Table>
 
-              <div className='dashboard-see-more'>
+              <div className='see-more'>
                 <Link to='/rewards'>See more&nbsp;<LaunchIcon fontSize="small"/></Link>
               </div>
               </>

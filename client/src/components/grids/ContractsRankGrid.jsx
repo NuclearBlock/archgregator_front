@@ -37,6 +37,7 @@ export default function ContractsRankGrid() {
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
+        setIsLoading(true);
         fetch('/api/contracts/')
         .then((response) => response.json())
         .then((data) => {
@@ -53,12 +54,14 @@ export default function ContractsRankGrid() {
     useEffect(() => {
         fetchData();
     }, []);
-
-    if (isLoading) {
-        return <div>Loading data...</div>;
-    }
     
     return (
+        <>
+
+        {isLoading && <div className="progress-main"><CircularProgress size="4rem" /></div>} 
+
+        {data.length > 0 && (
+        <>
         <Paper variant="outlined" square className={classes.root}>
             <TableContainer className={classes.container}>
                 <Table stickyHeader aria-label="sticky table">
@@ -127,5 +130,9 @@ export default function ContractsRankGrid() {
                 </Table>
             </TableContainer>
         </Paper>
+        </>
+        )}
+
+        </>
     );
 }

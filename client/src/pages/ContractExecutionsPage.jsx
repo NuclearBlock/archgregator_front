@@ -9,15 +9,7 @@ function ContractExecutionPage() {
 
   return (
     
-    <>
-        {/* <Grid container item xs={12} spacing={0}>
-            <Grid container item xs={12} sm={6} spacing={0} >
-                
-            </Grid>
-            <Grid container item xs={12} sm={6} spacing={0} >
-                <ParametersBlock />
-            </Grid>
-        </Grid> */}
+    <div cleaaName="main">
 
         <Grid container item xs={12} spacing={0}>
             <ContractExecutionsGrid />
@@ -26,7 +18,8 @@ function ContractExecutionPage() {
         <Grid container item xs={12} spacing={0}>
             
         </Grid>
-    </>
+        
+    </div>
   )
 };
 

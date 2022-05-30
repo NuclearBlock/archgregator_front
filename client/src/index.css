@@ -235,6 +235,11 @@ footer .footer-icon {
   min-height: 90vh;
 }
 
+.main-title {
+  word-wrap: break-word;
+  padding: 0 10px 10px 10px;
+}
+
 .progress-main {
   margin: 15% auto;
   text-align: center;
@@ -375,4 +380,18 @@ footer .footer-icon {
   font-size: 1.7rem;
   color: #ff5820;
   font-weight: 700;
+}
+
+@media (max-width:481px)  {
+  .contract-card {
+    text-align: center;
+    margin: 10px 0;
+  }
+
+  .value {
+    font-size: 1.6rem;
+  }
+  .heigh100 {
+    min-height: none;
+  }
 }

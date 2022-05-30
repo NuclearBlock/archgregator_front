@@ -62,9 +62,10 @@ function ContractInfoPage() {
 
             <Grid container spacing={0}>
                 <Grid  item xs={12} spacing={0}>
-                    <h1>Smart contract details</h1>
-                    {params.address}
-                    <br/><br/>
+                    <div className="main-title">
+                        <h1>Smart contract details</h1>
+                        <span>{params.address}</span>
+                    </div>
                 </Grid>
             </Grid>
 

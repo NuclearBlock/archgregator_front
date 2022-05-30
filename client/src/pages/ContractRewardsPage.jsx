@@ -17,12 +17,14 @@ export default function ContractRewardsPage() {
     
     return (
         
-        <>
+        <div className="main">
+
             <Grid container item xs={12} spacing={0}>
                 <Grid item xs={12} sm={6} spacing={0} >
-                    <h1>Smart contract rewards</h1>
-                    {params.address}
-                    <br/><br/>
+                    <div className="main-title">
+                        <h1>Smart contract rewards</h1>
+                        <span>{params.address}</span>
+                    </div>
                 </Grid>
 
                 <Grid item xs={12} sm={6} spacing={0} >
@@ -37,7 +39,8 @@ export default function ContractRewardsPage() {
             <Grid container item xs={12} spacing={0}>
                 
             </Grid>
-        </>
+
+        </div>
         
     );
 }

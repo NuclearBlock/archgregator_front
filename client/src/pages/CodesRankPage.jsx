@@ -10,11 +10,13 @@ function CodesRankPage() {
 
   return (
     
-    <>
+    <div className='main'>
 
         <Grid container spacing={0}>
             <Grid  item xs={12} spacing={2}>
-                <h1>Wasm codes list</h1>
+                <div className="main-title">
+                    <h1>Wasm codes list</h1>
+                </div>
             </Grid>
         </Grid>
 
@@ -25,7 +27,8 @@ function CodesRankPage() {
         <Grid container item xs={12} spacing={0}>
             
         </Grid>
-    </>
+        
+    </div>
   )
 };
 

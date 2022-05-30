@@ -11,31 +11,34 @@ function ContractsRankPage() {
 
     return (
 
-      <>
-        <Grid container spacing={0}>
-            <Grid  item xs={12} spacing={2}>
-              <h1>Smart contracts list</h1>
-            </Grid>
-        </Grid>
+        <div className="main">
 
-        <Grid container item xs={12} spacing={0}>
-            <Grid item xs={12} sm={6} spacing={0} >
+            <Grid container spacing={0}>
+                <Grid  item xs={12} spacing={2}>
+                    <div className="main-title">
+                        <h1>Smart contracts list</h1>
+                    </div>
+                </Grid>
+            </Grid>
+
+            <Grid container item xs={12} spacing={0}>
+                <Grid item xs={12} sm={6} spacing={0} >
+                    
+                </Grid>
+                <Grid item xs={12} sm={6} spacing={0} >
+                    {/* <ParametersBlock /> */}
+                </Grid>
+            </Grid>
+
+            <Grid container item xs={12} spacing={0}>
+                <ContractsRankGrid/>
+            </Grid>
+            
+            <Grid container item xs={12} spacing={0}>
                 
             </Grid>
-            <Grid item xs={12} sm={6} spacing={0} >
-                {/* <ParametersBlock /> */}
-            </Grid>
-        </Grid>
 
-        <Grid container item xs={12} spacing={0}>
-            <ContractsRankGrid/>
-        </Grid>
-        
-        <Grid container item xs={12} spacing={0}>
-            
-        </Grid>
-
-      </>
+      </div>
 
     );
 }

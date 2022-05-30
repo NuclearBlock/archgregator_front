@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useParams } from "react-router-dom";
+import React  from 'react';
+import { useParams } from "react-router-dom";
 
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -40,32 +37,37 @@ export default function ContractExecutionsPanel({ data, isLoading }) {
             <Table size="small" aria-label="a dense table">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="right">Sender</TableCell>
-                        <TableCell align="right">Gas Used</TableCell>
-                        <TableCell align="right">Fees</TableCell>
-                        <TableCell align="right">Tx</TableCell>
                         <TableCell align="right">Block</TableCell>
+                        <TableCell align="right">Sender</TableCell> 
+                        <TableCell align="right">Gas Used</TableCell>
+                        {/* <TableCell align="right">Fees</TableCell> */}
+                        <TableCell align="right">Tx</TableCell>                       
                     </TableRow>
                 </TableHead>
                 <TableBody>    
                 {data.map((row) => (
                     <TableRow hover >
                         <TableCell align="right">
-                            {minimizeStr(row.sender)}
+                            {row.height}
+                        </TableCell> 
+                        <TableCell align="right">
+                            <Hidden xsDown>
+                                {minimizeStr(row.sender)}
+                            </Hidden>
+                            <Hidden smUp>
+                                {minimizeStr(row.sender, 4, 4)}
+                            </Hidden>
                         </TableCell> 
                         <TableCell align="right">
                             {row.gas_used}
                         </TableCell> 
-                        <TableCell align="right">
+                        {/* <TableCell align="right">
                             {row.fees_amount}
-                        </TableCell> 
+                        </TableCell>  */}
                         <TableCell align="right">
                             <Link to={'/tx/'+row.tx_hash}>
                                 <LaunchIcon fontSize="inherit" color="Primary"/>
                             </Link>          
-                        </TableCell> 
-                        <TableCell align="right">
-                            {row.height}
                         </TableCell>                     
                     </TableRow>
                 ))}

@@ -6,10 +6,13 @@ export default function Page404() {
 
     return (
         
-        <>
+        <div className="main">
+
             <Grid container spacing={0}>
                 <Grid  item xs={12} spacing={0}>
-                    <h1>Page not found</h1>
+                    <div className="main-title">
+                        <h1>Page not found</h1>
+                    </div>
                 </Grid>
             </Grid>
 
@@ -21,7 +24,7 @@ export default function Page404() {
                 </Grid>
             </Grid>
 
-        </>
+        </div>
         
     );
 }

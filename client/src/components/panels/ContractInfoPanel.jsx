@@ -11,13 +11,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Chip from '@material-ui/core/Chip';
 
 import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 
 import Switch from '@material-ui/core/Switch';
 import LaunchIcon from '@material-ui/icons/Launch';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import ContractInfoChart from '../charts/ContractInfoChart'
-
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -35,7 +35,6 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
     return (
         <div className="panel">
    
-
             <Grid container spacing={0}>
 
                 <Grid item sm={6} spacing={0} >
@@ -71,7 +70,7 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                 
                                     <TableRow>
                                         <TableCell width="40%">
-                                            Wasm code used:
+                                            <Hidden xsDown >Wasm</Hidden> code used:
                                         </TableCell>
                                         <TableCell align="left">
                                             #{item.code_id}
@@ -80,7 +79,7 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
 
                                     <TableRow>
                                         <TableCell width="40%">
-                                            Creator address
+                                            Creator <Hidden xsDown >address:</Hidden>
                                         </TableCell>
                                         <TableCell align="left">
                                             {minimizeStr(item.creator, 8, 16)}
@@ -89,7 +88,7 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
 
                                     <TableRow>
                                         <TableCell width="40%">
-                                            Admin address:
+                                            Admin <Hidden xsDown >address:</Hidden>
                                         </TableCell>
                                         <TableCell align="left">
                                             {minimizeStr(item.admin, 8, 16)}
@@ -119,7 +118,12 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                             Tx:
                                         </TableCell>
                                         <TableCell align="left">
-                                            {minimizeStr(item.tx_hash, 15, 15)}
+                                            <Hidden xsDown >
+                                                {minimizeStr(item.tx_hash, 15, 15)}
+                                            </Hidden> 
+                                            <Hidden smUp >
+                                                {minimizeStr(item.tx_hash)}
+                                            </Hidden>    
                                             &nbsp;
                                             <Link to={'/tx/'+item.tx_hash}>
                                                 <LaunchIcon fontSize="small" color="Primary"/>
@@ -152,9 +156,10 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                     </div>
                     
                     {summary.length > 0 && (
+
                     <Grid container spacing={0}>
 
-                        <Grid item sm={7} spacing={0} >
+                        <Grid item xs={6} sm={7} spacing={0} >
                             <div className='contract-card'>
                                 <div className='label'>
                                     Total executions
@@ -165,7 +170,7 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                             </div>
                         </Grid>
 
-                        <Grid item sm={5} spacing={0} >
+                        <Grid item xs={6} sm={5} spacing={0} >
                             <div className='contract-card'>
                                 <div className='label'>
                                     Unique Executors
@@ -176,7 +181,9 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                             </div>
                         </Grid>
 
-                        <Grid item sm={7} spacing={0} >
+                    
+
+                        <Grid item xs={6} sm={7} spacing={0} >
                             <div className='contract-card'>
                                 <div className='label'>
                                     Rewards Earned
@@ -187,7 +194,7 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                             </div>
                         </Grid>
 
-                        <Grid item sm={5} spacing={0} >
+                        <Grid item xs={6} sm={5} spacing={0} >
                             <div className='contract-card'>
                                 <div className='label'>
                                     Subsidized Fees
@@ -198,15 +205,16 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                             </div>
                         </Grid>
 
-                        
-
                     </Grid>
+
                     )}
 
                     <Grid container spacing={0}>
                         
                         <Grid item sm={12} spacing={0} >
-                            <ContractInfoChart />
+                            <Hidden xsDown >
+                                <ContractInfoChart />
+                            </Hidden>    
                         </Grid>
 
                     </Grid>

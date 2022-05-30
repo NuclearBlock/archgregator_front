@@ -76,7 +76,6 @@ export default function RewardsRankGrid() {
         return address.slice(0, 7) + "..." + address.slice(-7)
     }
 
-    
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -258,88 +257,84 @@ export default function RewardsRankGrid() {
             </Grid>
         </Grid>
 
-        <Grid item sm={12} spacing={0}>
-            {/* <Grid container spacing={0} >
-                <Grid item xs={12} spacing={0} className={classes.grid}> */}
-                    <Paper square variant="outlined" className={classes.root}>
-                        {/* <TableContainer className={classes.container}> */}
-                            <Table stickyHeader aria-label="sticky table" className={classes.table}>
-                            <TableHead>
-                                <TableRow >
-                                    <TableCell>
-                                        #
-                                    </TableCell>
-                                    <TableCell>
-                                        Contract Address
-                                    </TableCell>
-                                    <TableCell>
-                                        Contract Label
-                                    </TableCell>
-                                    <TableCell>
-                                        Type
-                                    </TableCell>
-                                    <TableCell>
-                                        Count&nbsp;<CustomTooltip title="Count of rewards events"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                                    </TableCell>
-                                    <TableCell>
-                                        Total Distributed&nbsp;
-                                        <CustomTooltip title="Total amount of distributed rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                                    </TableCell>
-                                    <TableCell>
-                                        Total Calculated&nbsp;<CustomTooltip title="Total amount of calculated rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                                    </TableCell>
-                                    <TableCell>
-                                        Inflation Rewards&nbsp;<CustomTooltip title="Total amount of inflation rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                                    </TableCell>
-                                    {/* <TableCell>
-                                        Gas Consumed&nbsp;<CustomTooltip title="Total Gas consumed"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                                    </TableCell> */}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {data
-                                .map((item, i) => {
-                                    return (
-                                    <TableRow hover key={item.id}>
-                                        <TableCell>
-                                            {i+1}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Link component={RouterLink} to={"/contracts/"+item.contract_address} className={classes.link}>
-                                                {formatAddr(item.contract_address)}
-                                            </Link>  
-                                        </TableCell>
-                                        <TableCell>
-                                            {item.label}
-                                        </TableCell>
-                                        <TableCell>
-                                            &nbsp;
-                                        </TableCell>
-                                        <TableCell>
-                                            {item.count}
-                                        </TableCell>
-                                        <TableCell>
-                                            {item.sum_distributed_rewards}
-                                        </TableCell>
-                                        <TableCell>
-                                            {item.sum_calculated_rewards.toFixed(2)}
-                                        </TableCell>
-                                        <TableCell>
-                                            {item.sum_inflation_rewards.toFixed(2)}
-                                        </TableCell>
-                                        {/* <TableCell>
-                                            {item.sum_gas_consumed}
-                                        </TableCell> */}
-                                    </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                            </Table>
-                        {/* </TableContainer> */}
+        <Grid item xs={12} spacing={0}>
+           
+            <TableContainer className={classes.container}>
+                <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                    <TableRow >
+                        <TableCell>
+                            #
+                        </TableCell>
+                        <TableCell>
+                            Contract Address
+                        </TableCell>
+                        <TableCell>
+                            Contract Label
+                        </TableCell>
+                        <TableCell>
+                            Type
+                        </TableCell>
+                        <TableCell>
+                            Count&nbsp;<CustomTooltip title="Count of rewards events"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
+                        </TableCell>
+                        <TableCell>
+                            Total Distributed&nbsp;
+                            <CustomTooltip title="Total amount of distributed rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
+                        </TableCell>
+                        <TableCell>
+                            Total Calculated&nbsp;<CustomTooltip title="Total amount of calculated rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
+                        </TableCell>
+                        <TableCell>
+                            Inflation Rewards&nbsp;<CustomTooltip title="Total amount of inflation rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
+                        </TableCell>
+                        {/* <TableCell>
+                            Gas Consumed&nbsp;<CustomTooltip title="Total Gas consumed"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
+                        </TableCell> */}
+                    </TableRow>
+                </TableHead>
 
-                    </Paper>
-                {/* </Grid>
-            </Grid> */}
+                <TableBody>
+                    {data
+                    .map((item, i) => {
+                        return (
+                        <TableRow hover key={item.id}>
+                            <TableCell>
+                                {i+1}
+                            </TableCell>
+                            <TableCell>
+                                <Link component={RouterLink} to={"/contracts/"+item.contract_address} className={classes.link}>
+                                    {formatAddr(item.contract_address)}
+                                </Link>  
+                            </TableCell>
+                            <TableCell>
+                                {item.label}
+                            </TableCell>
+                            <TableCell>
+                                &nbsp;
+                            </TableCell>
+                            <TableCell>
+                                {item.count}
+                            </TableCell>
+                            <TableCell>
+                                {item.sum_distributed_rewards}
+                            </TableCell>
+                            <TableCell>
+                                {item.sum_calculated_rewards.toFixed(2)}
+                            </TableCell>
+                            <TableCell>
+                                {item.sum_inflation_rewards.toFixed(2)}
+                            </TableCell>
+                            {/* <TableCell>
+                                {item.sum_gas_consumed}
+                            </TableCell> */}
+                        </TableRow>
+                        );
+                    })}
+                </TableBody>
+                </Table>
+            </TableContainer>
+
         </Grid>
         </>
         )}

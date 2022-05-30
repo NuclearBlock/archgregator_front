@@ -1,10 +1,12 @@
 const Pool = require('pg').Pool
+
+const { dbHost, dbPort, dbDatabase, dbUser, dbPassword } = require('./config');
 const pool = new Pool({
-  user: 'archway',
-  host: 'localhost',
-  database: 'archway',
-  password: 'password',
-  port: 5432,
+  user: dbUser,
+  host: dbHost,
+  database: dbDatabase,
+  password: dbPassword,
+  port: dbPort,
 })
 
 const getSearch = (request, response) => { 

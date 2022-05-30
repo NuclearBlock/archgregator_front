@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require("express");
-const PORT = process.env.PORT || 3001;
+
+const { port } = require('./config');
+
 const app = express();
 
 const db = require('./queries')
@@ -68,6 +70,6 @@ app.get('*', (request, response) => {
     response.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
   });
 
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`Server listening on ${PORT}`);
+app.listen(port, '127.0.0.1', () => {
+  console.log(`Server listening on ${port}`);
 });

@@ -117,6 +117,8 @@ export default function RewardsRankGrid() {
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
+        setIsLoading(true);
+
         let apiUrl = '/api/rewards/?'
         
         apiUrl += 'type=' + rewardsType
@@ -174,14 +176,14 @@ export default function RewardsRankGrid() {
         window.sessionStorage.setItem("endDate", endDate);
         fetchData();
     }, [rewardsType, isPremium, startDate, endDate]);
-
-    if (isLoading) {
-        return <div>Data is loading ...</div>;
-    }
     
     return (
         <>
 
+        {isLoading && <div className="progress-main"><CircularProgress size="4rem" /></div>} 
+
+        {data.length > 0 && (
+        <>
         <Grid item sm={6} spacing={0} className={classes.grid}>
             <Grid container>
                 <Grid item xs={6} spacing={0} className={classes.grid}>
@@ -339,6 +341,9 @@ export default function RewardsRankGrid() {
                 {/* </Grid>
             </Grid> */}
         </Grid>
+        </>
+        )}
+
         </>
     );
 }

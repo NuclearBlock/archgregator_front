@@ -43,109 +43,123 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                         Contract Info
                     </div>
                     
-                    {/* {isLoading && <div class="dashboard-progress"><CircularProgress size="4rem" /></div>}  */}
-            
-                    {info.length == 0 && <div> No data found</div>} 
+                    <Grid container spacing={0}>
 
-                    {info.length > 0 && (
-                    <Table size="small">
-                        <TableBody>                 
-                            {info.map((item, i) =>
-                                <>
-                                    {item.label != ''
-                                        ?<TableRow >
-                                            <TableCell width="40%">
-                                                Label:
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <Chip
-                                                    size="small"
-                                                    label={item.label}
-                                                    color="primary"
-                                                />
-                                            </TableCell>
-                                        </TableRow>
-                                        : null
-                                    }
-                                
-                                    <TableRow>
-                                        <TableCell width="40%">
-                                            <Hidden xsDown >Wasm</Hidden> code used:
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            #{item.code_id}
-                                        </TableCell>
-                                    </TableRow>
+                        <Grid item sm={12} spacing={0} >
+                            <div className="outer">
 
-                                    <TableRow>
-                                        <TableCell width="40%">
-                                            Creator <Hidden xsDown >address:</Hidden>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            {minimizeStr(item.creator, 8, 16)}
-                                        </TableCell>
-                                    </TableRow>
+                            {/* {isLoading && <div className="circular-progress"><CircularProgress size="3rem" /></div>}  */}
+                            {isLoading && <div className="text-progress">Loading data ...</div>} 
 
-                                    <TableRow>
-                                        <TableCell width="40%">
-                                            Admin <Hidden xsDown >address:</Hidden>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            {minimizeStr(item.admin, 8, 16)}
-                                        </TableCell>
-                                    </TableRow>
+                            {info.length == 0 && <div className="loading-result"> No info found</div>} 
 
-                                    <TableRow>
-                                        <TableCell width="40%">
-                                            Instantiated:
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            {formatDate(item.instantiated_at)}
-                                        </TableCell>
-                                    </TableRow>
+                            {info.length > 0 && (
+                            <Table size="small">
+                                <TableBody>                 
+                                    {info.map((item, i) =>
+                                        <>
+                                            {item.label != ''
+                                                ?<TableRow >
+                                                    <TableCell width="40%">
+                                                        Label:
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <Chip
+                                                            size="small"
+                                                            label={item.label}
+                                                            color="primary"
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                                : null
+                                            }
+                                        
+                                            <TableRow>
+                                                <TableCell width="40%">
+                                                    <Hidden xsDown >Wasm</Hidden> code used:
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    #{item.code_id}
+                                                </TableCell>
+                                            </TableRow>
 
-                                    <TableRow>
-                                        <TableCell width="40%">
-                                            Block:
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            {item.height}
-                                        </TableCell>
-                                    </TableRow>
+                                            <TableRow>
+                                                <TableCell width="40%">
+                                                    Creator <Hidden xsDown >address:</Hidden>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    {minimizeStr(item.creator, 8, 16)}
+                                                </TableCell>
+                                            </TableRow>
 
-                                    <TableRow>
-                                        <TableCell width="40%">
-                                            Tx:
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Hidden xsDown >
-                                                {minimizeStr(item.tx_hash, 15, 15)}
-                                            </Hidden> 
-                                            <Hidden smUp >
-                                                {minimizeStr(item.tx_hash)}
-                                            </Hidden>    
-                                            &nbsp;
-                                            <Link to={'/tx/'+item.tx_hash}>
-                                                <LaunchIcon fontSize="small" color="Primary"/>
-                                            </Link>  
-                                        </TableCell>
-                                    </TableRow>
-                                    
-                                    {/* <TableRow>
-                                        <TableCell width="40%">
-                                            RAW Message:
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <VisibilityIcon fontSize="small" color="Primary"/>
-                                        </TableCell>
-                                    </TableRow>  */}
+                                            <TableRow>
+                                                <TableCell width="40%">
+                                                    Admin <Hidden xsDown >address:</Hidden>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    {minimizeStr(item.admin, 8, 16)}
+                                                </TableCell>
+                                            </TableRow>
 
-                                </>
-                            )[0]}
+                                            <TableRow>
+                                                <TableCell width="40%">
+                                                    Instantiated:
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    {formatDate(item.instantiated_at)}
+                                                </TableCell>
+                                            </TableRow>
 
-                        </TableBody>
-                    </Table>
-                    )}
+                                            <TableRow>
+                                                <TableCell width="40%">
+                                                    Block:
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    {item.height}
+                                                </TableCell>
+                                            </TableRow>
+
+                                            <TableRow>
+                                                <TableCell width="40%">
+                                                    Tx:
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Hidden xsDown >
+                                                        {minimizeStr(item.tx_hash, 15, 15)}
+                                                    </Hidden> 
+                                                    <Hidden smUp >
+                                                        {minimizeStr(item.tx_hash)}
+                                                    </Hidden>    
+                                                    &nbsp;
+                                                    <Link to={'/tx/'+item.tx_hash}>
+                                                        <LaunchIcon fontSize="small" color="Primary"/>
+                                                    </Link>  
+                                                </TableCell>
+                                            </TableRow>
+                                            
+                                            {/* <TableRow>
+                                                <TableCell width="40%">
+                                                    RAW Message:
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <VisibilityIcon fontSize="small" color="Primary"/>
+                                                </TableCell>
+                                            </TableRow>  */}
+
+                                        </>
+                                    )[0]}
+
+                                </TableBody>
+                            </Table>
+
+                            )}
+                            </div>
+                        </Grid>
+
+                    </Grid>
+                    
+
+                    
 
                 </Grid>
 

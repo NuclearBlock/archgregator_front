@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+import { LinearProgress } from '@material-ui/core';
+
 export default function ContractInfoChart() {
 
     const params = useParams();
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
+        setIsLoading(true);
         fetch(`/api/executionscount/${params.address}/30`)
         .then((response) => response.json())
         .then((data) => {
@@ -34,9 +37,9 @@ export default function ContractInfoChart() {
         <ResponsiveContainer width="100%" height="100%">
         <>
 
-            {isLoading && <div className="chart-progress">Loading data ...</div>} 
+            {isLoading && <div className="linear-progress"><LinearProgress /></div>}
 
-            {data.length == 0 && <div className="chart-progress">No data found</div>}
+            {data.length == 0 && <div className="loading-result">No data found</div>}
               
             {data.length > 0 &&
                 <AreaChart

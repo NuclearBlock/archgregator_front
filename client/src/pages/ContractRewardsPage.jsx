@@ -19,16 +19,12 @@ export default function ContractRewardsPage() {
         
         <div className="main">
 
-            <Grid container item xs={12} spacing={0}>
-                <Grid item xs={12} sm={6} spacing={0} >
+            <Grid container spacing={0}>
+                <Grid item xs={12} spacing={0} >
                     <div className="main-title">
                         <h1>Smart contract rewards</h1>
                         <span>{params.address}</span>
                     </div>
-                </Grid>
-
-                <Grid item xs={12} sm={6} spacing={0} >
-                    
                 </Grid>
             </Grid>
 

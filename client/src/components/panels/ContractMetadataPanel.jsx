@@ -9,6 +9,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import { LinearProgress } from '@material-ui/core';
+
 import Switch from '@material-ui/core/Switch';
 
 import LaunchIcon from '@material-ui/icons/Launch';
@@ -61,7 +63,9 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                 Metadata Settings
             </div>
 
-            {data.length == 0 && <div> No metadata found</div>} 
+            {isLoading && <div className="linear-progress"><LinearProgress /></div>} 
+
+            {data.length == 0 && <div className="loading-result"> No metadata found</div>} 
 
             {data.length > 0 && (
 

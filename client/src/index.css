@@ -246,6 +246,7 @@ footer .footer-icon {
 }
 
 .panel {
+  position: relative;
   border: 1px solid #ddd;
   margin: 2px;
   padding: 15px;
@@ -265,6 +266,45 @@ footer .footer-icon {
   color: #666;
   font-size: 0.7rem;
 }
+
+.circular-progress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.linear-progress {
+  padding: 60px 20%;
+  text-align: center;
+}
+
+.text-progress {
+  padding: 60px 0;
+  text-align: center;
+  text-transform: uppercase;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.outer {
+  position: relative;
+  height: 100%;
+}
+
+.loading-result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  /* padding: 40px 0; */
+  text-align: center;
+  text-transform: uppercase;
+  color: #999;
+  font-size: 0.8rem;
+}
+
+
 
 .dashboard-card {
   border: 1px solid #ddd;
@@ -357,7 +397,8 @@ footer .footer-icon {
 }
 
 .heigh100 {
-  min-height: 100%;
+  min-height: 100px;
+  height: 100%;
 }
 
 .right {
@@ -392,6 +433,6 @@ footer .footer-icon {
     font-size: 1.6rem;
   }
   .heigh100 {
-    min-height: none;
+    height: none;
   }
 }

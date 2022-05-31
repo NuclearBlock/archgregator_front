@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useParams } from "react-router-dom";
-
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import { useParams } from "react-router-dom";
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import LaunchIcon from '@material-ui/icons/Launch';
 import { Link } from "react-router-dom";
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function ContractRewardsPanel({ data, isLoading }) {
 
@@ -33,45 +28,53 @@ export default function ContractRewardsPanel({ data, isLoading }) {
                 Last Rewards:
             </div>   
 
-            <Table size="small" aria-label="sticky table">
-                <TableHead>
-                    <TableRow hover size='small'>
-                        <TableCell>
-                            Date
-                        </TableCell>
-                        <TableCell>
-                            Calculated
-                        </TableCell>
-                        <TableCell align="right">
-                            Block
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data
-                    .map((item, i) => {
-                        return (
-                        <TableRow key={item.id} hover>
+            {isLoading && <div className="circular-progress"><CircularProgress size="3rem" /></div>} 
+
+            {data.length == 0 && <div className="loading-result">No data found</div>}
+              
+            {data.length > 0 && (
+                <>
+                <Table size="small" aria-label="sticky table">
+                    <TableHead>
+                        <TableRow hover size='small'>
                             <TableCell>
-                                {formatDate(item.reward_date)}
+                                Date
                             </TableCell>
                             <TableCell>
-                                {/* TO-DO Fix denom to settings constant */}
-                                {item.contract_rewards_amount.toFixed(2)} utorii
+                                Calculated
                             </TableCell>
                             <TableCell align="right">
-                                {item.height}
+                                Block
                             </TableCell>
                         </TableRow>
-                        );
-                    })}
-                </TableBody>
+                    </TableHead>
+                    <TableBody>
+                        {data
+                        .map((item, i) => {
+                            return (
+                            <TableRow key={item.id} hover>
+                                <TableCell>
+                                    {formatDate(item.reward_date)}
+                                </TableCell>
+                                <TableCell>
+                                    {/* TO-DO Fix denom to settings constant */}
+                                    {item.contract_rewards_amount.toFixed(2)} utorii
+                                </TableCell>
+                                <TableCell align="right">
+                                    {item.height}
+                                </TableCell>
+                            </TableRow>
+                            );
+                        })}
+                    </TableBody>
 
-            </Table>
+                </Table>
 
-            <div className='see-more'>
-                <Link to={'/rewards/'+params.address}>See all rewards&nbsp;<LaunchIcon fontSize="small"/></Link>
-            </div>
+                <div className='see-more'>
+                    <Link to={'/rewards/'+params.address}>See all rewards&nbsp;<LaunchIcon fontSize="small"/></Link>
+                </div>
+                </>
+            )}
 
         </div>
         

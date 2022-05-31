@@ -17,8 +17,8 @@ function ContractInfoPage() {
         contractData: false, 
         contractSummary: false,
         contractMetaData: false,
-        contractRewards: [],
-        contractExecutions: [],
+        contractRewards: false,
+        contractExecutions: false,
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -35,6 +35,7 @@ function ContractInfoPage() {
         ])
         .then(([res1, res2, res3, res4, res5]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json()]))
         .then(([data1, data2, data3, data4, data5]) => {
+            
             setIsLoading(false);
             setData({
                 contractData: data1, 

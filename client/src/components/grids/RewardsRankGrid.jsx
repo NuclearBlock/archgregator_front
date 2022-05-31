@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,9 +11,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { LinearProgress } from '@material-ui/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Tooltip from '@material-ui/core/Tooltip';
-import Checkbox from '@material-ui/core/Checkbox';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -72,24 +71,53 @@ export default function RewardsRankGrid() {
 
     const classes = useStyles();
 
-    const formatAddr = (address) => {
-        return address.slice(0, 7) + "..." + address.slice(-7)
+    const minimizeStr = (str, start = 8, end = 8) => {
+        return str.slice(0, start) + "..." + str.slice(-end)
     }
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    // const [page, setPage] = React.useState(0);
+    // const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+    // const handleChangePage = (event, newPage) => {
+    //     setPage(newPage);
+    // };
+
+    // const handleChangeRowsPerPage = (event) => {
+    //     setRowsPerPage(+event.target.value);
+    //     setPage(0);
+    // };
+
+    const [rewardsType, setRewardsType] = useState(() => {
+        return window.sessionStorage.getItem("rewardsType") || 1
+    })
+
+    const [isPremium, setIsPremiun] = useState(() => {
+        if (window.sessionStorage.getItem("isPremium") == 'true') {
+            return true
+        } else if (window.sessionStorage.getItem("isPremium") == 'false') {
+            return false
+        } else {
+            return true
+        }    
+    })
+
+    const [startDate, setStartDate] = useState(() => {
+        return new Date(window.sessionStorage.getItem("startDate")) || new Date(2022, 0, 1)
+    })
+
+    const [endDate, setEndDate] = useState(() => {
+        return new Date(window.sessionStorage.getItem("endDate")) || new Date()
+    })
+
+    const handleRewardsType = (event) => {
+        setRewardsType(event.target.value);
+        // if (event.target.value == 3) {
+        //     setIsPremiun(false);
+        // }
+    }
+    const handleIsPremium = (event) => {
+        setIsPremiun(event.target.checked);
     };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
-    const [startDate, setStartDate] = useState(new Date(2022, 0, 1));
-    const [endDate, setEndDate] = useState(new Date());
 
     const handleStartDateChange = (date) => {
         setStartDate(date);
@@ -98,24 +126,12 @@ export default function RewardsRankGrid() {
         setEndDate(date);
     };
 
-
-    const [rewardsType, setRewardsType] = useState(1);
-    const [isPremium, setIsPremiun] = useState(true);
-    
-    const handleRewardsType = (event) => {
-        setRewardsType(event.target.value);
-    }
-    const handleIsPremium = (event) => {
-        setIsPremiun(event.target.checked);
-    };
-
-
-
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
+        setData(false);
         setIsLoading(true);
 
         let apiUrl = '/api/rewards/?'
@@ -145,28 +161,9 @@ export default function RewardsRankGrid() {
         });
     };
 
-    const [age, setAge] = React.useState('');
-
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
-
-
-    useEffect(() => {
-        const rewardsType = window.localStorage.getItem('rewardsType');
-        if ( rewardsType !== null ) setRewardsType(JSON.parse(rewardsType));
-        const isPremium = window.localStorage.getItem('isPremium');
-        if ( isPremium !== null ) setIsPremiun(JSON.parse(isPremium));
-        const startDate = window.localStorage.getItem('startDate');
-        if ( startDate !== null ) setStartDate(JSON.parse(startDate));
-        const endDate = window.localStorage.getItem('endDate');
-        if ( endDate !== null ) setEndDate(JSON.parse(endDate));
-        // setRewardsType(JSON.parse(window.sessionStorage.getItem("rewardsType")));
-        // setIsPremiun(JSON.parse(window.sessionStorage.getItem("isPremium")));
-        // setStartDate(JSON.parse(window.sessionStorage.getItem("startDate")));
-        // setEndDate(JSON.parse(window.sessionStorage.getItem("endDate")));
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
     useEffect(() => {
         window.sessionStorage.setItem("rewardsType", rewardsType);
@@ -177,12 +174,11 @@ export default function RewardsRankGrid() {
     }, [rewardsType, isPremium, startDate, endDate]);
     
     return (
+
         <>
 
-        {isLoading && <div className="progress-main"><CircularProgress size="4rem" /></div>} 
-
-        {data.length > 0 && (
-        <>
+        {/* {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>}  */}
+        
         <Grid item sm={6} spacing={0} className={classes.grid}>
             <Grid container>
                 <Grid item xs={6} spacing={0} className={classes.grid}>
@@ -195,9 +191,9 @@ export default function RewardsRankGrid() {
                             value={rewardsType}
                             onChange={handleRewardsType}
                             >
-                            <MenuItem value={1}>All rewards</MenuItem>
+                            <MenuItem value={1}>All calculations</MenuItem>
                             <MenuItem value={2}>Developer rewards</MenuItem>
-                            <MenuItem value={3}>Users fees subsidize</MenuItem>
+                            <MenuItem value={3}>Users fees subsidies</MenuItem>
                         </Select>
                     </FormControl>
                 
@@ -210,11 +206,12 @@ export default function RewardsRankGrid() {
                         control={<Switch color="primary" size="small" checked={isPremium} onChange={handleIsPremium}/>}
                         label="Premium contracts"
                         labelPlacement="start"
+                        disabled={rewardsType == 3 ? true : false}
                     />
                 </Grid> 
 
             </Grid>
-              
+            
         </Grid>
 
         <Grid item sm={6} spacing={0} className={classes.gridcenter}>
@@ -256,87 +253,94 @@ export default function RewardsRankGrid() {
                 </Grid>
             </Grid>
         </Grid>
-
-        <Grid item xs={12} spacing={0}>
-           
-            <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                    <TableRow >
-                        <TableCell>
-                            #
-                        </TableCell>
-                        <TableCell>
-                            Contract Address
-                        </TableCell>
-                        <TableCell>
-                            Contract Label
-                        </TableCell>
-                        <TableCell>
-                            Type
-                        </TableCell>
-                        <TableCell>
-                            Count&nbsp;<CustomTooltip title="Count of rewards events"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                        </TableCell>
-                        <TableCell>
-                            Total Distributed&nbsp;
-                            <CustomTooltip title="Total amount of distributed rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                        </TableCell>
-                        <TableCell>
-                            Total Calculated&nbsp;<CustomTooltip title="Total amount of calculated rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                        </TableCell>
-                        <TableCell>
-                            Inflation Rewards&nbsp;<CustomTooltip title="Total amount of inflation rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                        </TableCell>
-                        {/* <TableCell>
-                            Gas Consumed&nbsp;<CustomTooltip title="Total Gas consumed"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                        </TableCell> */}
-                    </TableRow>
-                </TableHead>
-
-                <TableBody>
-                    {data
-                    .map((item, i) => {
-                        return (
-                        <TableRow hover key={item.id}>
+        
+        {/* {isLoading && <div className="linear-progress"><LinearProgress /></div>}  */}
+        {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
+        
+        {data.length == 0 && <div className="loading-result">No data found</div>} 
+        
+        {data.length > 0 && (
+            <>
+            <Grid item xs={12} spacing={0}>
+            
+                <TableContainer className={classes.container}>
+                    <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        <TableRow >
                             <TableCell>
-                                {i+1}
+                                #
                             </TableCell>
                             <TableCell>
-                                <Link component={RouterLink} to={"/contracts/"+item.contract_address} className={classes.link}>
-                                    {formatAddr(item.contract_address)}
-                                </Link>  
+                                Contract Address
                             </TableCell>
                             <TableCell>
-                                {item.label}
+                                Contract Label
                             </TableCell>
                             <TableCell>
-                                &nbsp;
+                                Type
                             </TableCell>
                             <TableCell>
-                                {item.count}
+                                Count&nbsp;<CustomTooltip title="Count of rewards events"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell>
                             <TableCell>
-                                {item.sum_distributed_rewards}
+                                Total Distributed&nbsp;
+                                <CustomTooltip title="Total amount of distributed rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell>
                             <TableCell>
-                                {item.sum_calculated_rewards.toFixed(2)}
+                                Total Calculated&nbsp;<CustomTooltip title="Total amount of calculated rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell>
                             <TableCell>
-                                {item.sum_inflation_rewards.toFixed(2)}
+                                Inflation Rewards&nbsp;<CustomTooltip title="Total amount of inflation rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell>
                             {/* <TableCell>
-                                {item.sum_gas_consumed}
+                                Gas Consumed&nbsp;<CustomTooltip title="Total Gas consumed"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell> */}
                         </TableRow>
-                        );
-                    })}
-                </TableBody>
-                </Table>
-            </TableContainer>
+                    </TableHead>
 
-        </Grid>
-        </>
+                    <TableBody>
+                        {data
+                        .map((item, i) => {
+                            return (
+                            <TableRow hover key={item.id}>
+                                <TableCell>
+                                    {i+1}
+                                </TableCell>
+                                <TableCell>
+                                    <Link component={RouterLink} to={"/contracts/"+item.contract_address} className={classes.link}>
+                                        {minimizeStr(item.contract_address)}
+                                    </Link>  
+                                </TableCell>
+                                <TableCell>
+                                    {item.label}
+                                </TableCell>
+                                <TableCell>
+                                    &nbsp;
+                                </TableCell>
+                                <TableCell>
+                                    {item.count}
+                                </TableCell>
+                                <TableCell>
+                                    {item.sum_distributed_rewards}
+                                </TableCell>
+                                <TableCell>
+                                    {item.sum_calculated_rewards.toFixed(2)}
+                                </TableCell>
+                                <TableCell>
+                                    {item.sum_inflation_rewards.toFixed(2)}
+                                </TableCell>
+                                {/* <TableCell>
+                                    {item.sum_gas_consumed}
+                                </TableCell> */}
+                            </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                    </Table>
+                </TableContainer>
+
+            </Grid>
+            </>
         )}
 
         </>

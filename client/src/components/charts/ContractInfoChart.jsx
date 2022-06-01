@@ -44,7 +44,7 @@ export default function ContractInfoChart() {
             {data.length > 0 &&
                 <AreaChart
                   width={550}
-                  height={150}
+                  height={170}
                   data={data}
                   margin={{
                     top: 0,

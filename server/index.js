@@ -34,8 +34,11 @@ app.get('/api/rewardstoday', db.getRewardsToday)
 // Get rewards rank
 app.get('/api/rewards', db.getRewardsRank)
 
-//Get rewards by conreact address
-app.get('/api/rewards/:address/:limit', db.getContractRewards)
+//Get rewards by conract address
+app.get('/api/rewards/:address', db.getContractRewards)
+
+//Get rewards by conract address for block
+app.get('/api/rewards/:address/:block', db.getContractRewardsForBlock)
 
 // Get contracts rank
 app.get('/api/contracts', db.getContractsRank)
@@ -50,7 +53,10 @@ app.get('/api/contractsummary/:address', db.getContractSummary)
 app.get('/api/contracts/metadata/:address', db.getContractMetadata)
 
 // Get wasm contracts executions
-app.get('/api/executions/:address/:limit', db.getContractExecutions)
+app.get('/api/executions/:address', db.getContractExecutions)
+
+// Get wasm contracts executions
+app.get('/api/executions/:address/:block', db.getContractExecutionsForBlock)
 
 // Get wasm contracts executions count by period
 app.get('/api/executionscount/:address/:limit', db.getContractExecutionsByPeriod)

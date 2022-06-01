@@ -133,10 +133,12 @@ const getRewardsRank = (request, response) => {
       where += condition;
   });
 
-  let qstr = 'SELECT cr.contract_address, wc.label, count(cr.contract_address), sum(cr.contract_rewards_amount) AS sum_calculated_rewards, sum(cr.inflation_rewards_amount) AS sum_inflation_rewards, sum(cr.distributed_rewards_amount) AS sum_distributed_rewards, sum(cr.leftover_rewards_amount) AS leftover_rewards, sum(cr.gas_consumed::decimal) AS sum_gas_consumed FROM contract_reward cr LEFT JOIN wasm_contract wc ON cr.contract_address=wc.contract_address' + where + ' GROUP BY cr.contract_address, wc.label ORDER BY sum_distributed_rewards DESC LIMIT $1;'
+  // let qstr = 'SELECT cr.contract_address, wc.label, count(cr.contract_address), sum(cr.contract_rewards_amount) AS sum_calculated_rewards, sum(cr.inflation_rewards_amount) AS sum_inflation_rewards, sum(cr.distributed_rewards_amount) AS sum_distributed_rewards, sum(cr.leftover_rewards_amount) AS leftover_rewards, sum(cr.gas_consumed::decimal) AS sum_gas_consumed FROM contract_reward cr LEFT JOIN wasm_contract wc ON cr.contract_address=wc.contract_address' + where + ' GROUP BY cr.contract_address, wc.label ORDER BY sum_distributed_rewards DESC LIMIT $1;'
+  
+  let queryStr = 'SELECT cr.contract_address, wc.label, count(cr.contract_address) AS calculations, sum(cr.contract_rewards_amount) AS sum_calculated_rewards FROM contract_reward cr LEFT JOIN wasm_contract wc ON cr.contract_address=wc.contract_address' + where + ' GROUP BY cr.contract_address, wc.label ORDER BY sum_calculated_rewards DESC LIMIT $1;'
   //console.log(qstr)
 
-  pool.query(qstr, [limit], (error, results) => {
+  pool.query(queryStr, [limit], (error, results) => {
       if (error) {
         throw error
       }
@@ -145,12 +147,50 @@ const getRewardsRank = (request, response) => {
 }
 
 const getContractRewards = (request, response) => {
-  const limit = request.params.limit
-  if (!limit && limit > 100) {
-    limit = 100
+  let limit = 100;
+  for (let parameter in request.query) { 
+    let value = request.query[parameter]
+    if (parameter == 'limit') { 
+      if (value > 0 && value <= 100)
+      limit = value;
+    }  
   }
   const contractAddress = request.params.address
-  pool.query('SELECT * FROM contract_reward WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;', [contractAddress, limit], (error, results) => {
+  
+  // let queryStr = 'SELECT * FROM contract_reward WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;';
+  let queryStr = 'SELECT distinct(height), reward_date, contract_address, distributed_rewards_amount FROM contract_reward WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;';
+  pool.query(queryStr, [contractAddress, limit], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getContractRewardsForBlock = (request, response) => {
+  const contractAddress = request.params.address
+  const block = request.params.block
+
+  let queryStr = 'SELECT * FROM contract_reward WHERE contract_address = $1 AND height = $2;';
+  pool.query(queryStr, [contractAddress, block], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getContractExecutions = (request, response) => {
+  let limit = 100;
+  for (let parameter in request.query) { 
+    let value = request.query[parameter]
+    if (parameter == 'limit') { 
+      if (value > 0 && value <= 100)
+      limit = value;
+    }  
+  }
+  const contractAddress = request.params.address
+  pool.query('SELECT * FROM wasm_execute_contract WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;', [contractAddress, limit], (error, results) => {
       if (error) {
       throw error
       }
@@ -158,13 +198,10 @@ const getContractRewards = (request, response) => {
   })
 }
 
-const getContractExecutions = (request, response) => {
-  const limit = request.params.limit
-  if (!limit && limit > 100) {
-    limit = 100
-  }
+const getContractExecutionsForBlock = (request, response) => {
   const contractAddress = request.params.address
-  pool.query('SELECT * FROM wasm_execute_contract WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;', [contractAddress, limit], (error, results) => {
+  const block = request.params.block
+  pool.query('SELECT * FROM wasm_execute_contract WHERE contract_address = $1 AND height = $2;', [contractAddress, block], (error, results) => {
       if (error) {
       throw error
       }
@@ -269,10 +306,12 @@ module.exports = {
     getContractsRank,
     getRewardsRank,
     getContractRewards,
+    getContractRewardsForBlock,
     getContractInfo,
     getContractSummary,
     getContractMetadata,
     getContractExecutions,
+    getContractExecutionsForBlock,
     getContractExecutionsByPeriod,
     getRewardsRatio,
     getRewardsChart,

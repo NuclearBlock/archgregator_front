@@ -10,10 +10,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { LinearProgress } from '@material-ui/core';
-
 import Switch from '@material-ui/core/Switch';
-
 import LaunchIcon from '@material-ui/icons/Launch';
+import Hidden from '@material-ui/core/Hidden';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +76,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
 
                             <TableRow>
                                 <TableCell width="40%">
-                                    Metadata Saved:
+                                    <Hidden xsDown >Metadata </Hidden>Saved:
                                 </TableCell>
                                 <TableCell align="left">
                                     {formatDate(item.saved_at)}
@@ -86,11 +85,15 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
 
                             <TableRow>
                                 <TableCell width="40%">
-                                    Developer arddress:
+                                    Developer<Hidden xsDown > address</Hidden>:
                                 </TableCell>
                                 <TableCell align="left">
-                                    {/* {minimizeStr(item.developer_address)} */}
-                                    {item.developer_address}
+                                    <Hidden xsDown >
+                                        {item.developer_address}             
+                                    </Hidden> 
+                                    <Hidden smUp >
+                                        {minimizeStr(item.developer_address, 12, 12)}
+                                    </Hidden> 
                                 </TableCell>
                             </TableRow>
 
@@ -100,13 +103,18 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                 </TableCell>
                                 <TableCell align="left">
                                     {/* {minimizeStr(item.reward_address)} */}
-                                    {item.reward_address}
+                                    <Hidden xsDown >
+                                        {item.reward_address}
+                                    </Hidden> 
+                                    <Hidden smUp >                         
+                                        {minimizeStr(item.reward_address, 12, 12)}
+                                    </Hidden> 
                                 </TableCell>
                             </TableRow>
 
                             <TableRow>
                                 <TableCell width="40%">
-                                    Collect Premium:
+                                    <Hidden xsDown >Collect </Hidden>Premium:
                                 </TableCell>
                                 <TableCell align="left">
                                     <Switch
@@ -121,7 +129,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
 
                             <TableRow>
                                 <TableCell width="40%">
-                                    Premium percentage charge:
+                                    <Hidden xsDown >Premium percentage charge</Hidden> (%):
                                 </TableCell>
                                 <TableCell align="left">
                                     {item.premium_percentage_charged}
@@ -130,7 +138,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
 
                             <TableRow>
                                 <TableCell width="40%">
-                                    Gas Rebate to User:
+                                    Gas<Hidden xsDown > Rebate</Hidden> to User:
                                 </TableCell>
                                 <TableCell align="left">
                                     <Switch
@@ -145,15 +153,19 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
 
                             <TableRow>
                                 <TableCell width="40%">
-                                    Metadata Transaction:
+                                    <Hidden xsDown >Metadata </Hidden>Transaction:
                                 </TableCell>
                                 <TableCell align="left">
-                                    {/* {minimizeStr(item.tx_hash)} */}
-                                    {item.tx_hash}
+                                    <Hidden xsDown >
+                                        {item.tx_hash}             
+                                    </Hidden> 
+                                    <Hidden smUp >
+                                        {minimizeStr(item.tx_hash, 10, 10)}
+                                    </Hidden> 
                                     &nbsp;
                                     <Link to={'/tx/'+item.tx_hash}>
-                                        <LaunchIcon fontSize="small" color="Primary"/>
-                                    </Link>  
+                                        <LaunchIcon fontSize="inherit" color="Primary"/>
+                                    </Link> 
                                 </TableCell>
                             </TableRow>
 

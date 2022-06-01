@@ -19,6 +19,8 @@ import ContractInfoPage from './pages/ContractInfoPage'
 import CodesRankPage from './pages/CodesRankPage'
 import ContractsExecutionsPage from './pages/ContractExecutionsPage';
 import ContractRewardsPage from './pages/ContractRewardsPage';
+import RewardPage from './pages/RewardPage';
+import CodePage from './pages/CodePage';
 import TxPage from './pages/TxPage';
 import PageSearchNotFound from './pages/PageSearchNotFound';
 import Page404 from './pages/Page404';
@@ -43,34 +45,36 @@ function App() {
   return (
 
     <div className="App"> 
-        <ThemeProvider theme={theme}>
-            <Top />
-            <Header />
-            <Container maxWidth="lg">
-                {/* <div className="AppMain"> */}
-                <Grid container spacing={1}>
-                    <Grid item xs={12} sm={1} lg={1} spacing={0}>
-                      <SidePanel />
-                    </Grid>
-                    <Grid item xs={12} sm={11} spacing={0}>
-                        <Routes>
-                            <Route path="/" element={<Dashboard />} />
-                            <Route path="/rewards" element={<RewardsRankPage />} />
-                                <Route path="/rewards/:address" element={<ContractRewardsPage />} />
-                            <Route path="/contracts" element={<ContractsRankPage />} />
-                                <Route path="/contracts/:address" element={<ContractInfoPage />} />
-                            <Route path="/codes" element={<CodesRankPage />} />
-                            <Route path="/executions/:address" element={<ContractsExecutionsPage />} />
-                            <Route path="/tx/:hash" element={<TxPage />} />
-                            <Route path="not-found" element={<PageSearchNotFound />} />
-                            <Route path="*" element={<Page404 />} />
-                        </Routes>
-                    </Grid>
-                </Grid>
-                {/* </div> */}
-            </Container>
-            <Footer />
-        </ThemeProvider> 
+      <ThemeProvider theme={theme}>
+        <Top />
+        <Header />
+        <Container maxWidth="lg">
+          {/* <div className="AppMain"> */}
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={1} lg={1} spacing={0}>
+              <SidePanel />
+            </Grid>
+            <Grid item xs={12} sm={11} spacing={0}>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/rewards" element={<RewardsRankPage />} />
+                  <Route path="/rewards/:address" element={<ContractRewardsPage />} />
+                    <Route path="/rewards/:address/:block" element={<RewardPage />} />
+                <Route path="/contracts" element={<ContractsRankPage />} />
+                    <Route path="/contracts/:address" element={<ContractInfoPage />} />
+                <Route path="/codes" element={<CodesRankPage />} />
+                  <Route path="/codes/:id" element={<CodePage />} />
+                <Route path="/executions/:address" element={<ContractsExecutionsPage />} />
+                <Route path="/tx/:hash" element={<TxPage />} />
+                <Route path="not-found" element={<PageSearchNotFound />} />
+                <Route path="*" element={<Page404 />} />
+              </Routes>
+            </Grid>
+          </Grid>
+          {/* </div> */}
+        </Container>
+        <Footer />
+      </ThemeProvider> 
     </div>
   );
 }

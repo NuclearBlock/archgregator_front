@@ -28,7 +28,7 @@ export default function ContractRewardsPanel({ data, isLoading }) {
                 Last Rewards:
             </div>   
 
-            {isLoading && <div className="circular-progress"><CircularProgress size="3rem" /></div>} 
+            {isLoading && <div className="text-progress">Loading data ...</div>} 
 
             {data.length == 0 && <div className="loading-result">No data found</div>}
               
@@ -37,14 +37,14 @@ export default function ContractRewardsPanel({ data, isLoading }) {
                 <Table size="small" aria-label="sticky table">
                     <TableHead>
                         <TableRow hover size='small'>
-                            <TableCell>
-                                Date
-                            </TableCell>
-                            <TableCell>
-                                Calculated
-                            </TableCell>
                             <TableCell align="right">
                                 Block
+                            </TableCell>
+                            <TableCell align="right">
+                                Distributed amount
+                            </TableCell>
+                            <TableCell align="right">
+                                Details
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -53,15 +53,21 @@ export default function ContractRewardsPanel({ data, isLoading }) {
                         .map((item, i) => {
                             return (
                             <TableRow key={item.id} hover>
-                                <TableCell>
+                                {/* <TableCell>
                                     {formatDate(item.reward_date)}
-                                </TableCell>
-                                <TableCell>
-                                    {/* TO-DO Fix denom to settings constant */}
-                                    {item.contract_rewards_amount.toFixed(2)} utorii
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align="right">
                                     {item.height}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {item.distributed_rewards_amount}
+                                    {/* TO-DO Fix denom to settings constant */}
+                                    &nbsp;utorii
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Link to={'/rewards/'+item.contract_address+'/'+item.height}>
+                                        <LaunchIcon fontSize="inherit"/>
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                             );

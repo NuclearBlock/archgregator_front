@@ -30,8 +30,8 @@ function ContractInfoPage() {
             fetch(`/api/contracts/${params.address}`),
             fetch(`/api/contractsummary/${params.address}`),
             fetch(`/api/contracts/metadata/${params.address}`),
-            fetch(`/api/rewards/${params.address}/10`),
-            fetch(`/api/executions/${params.address}/10`),
+            fetch(`/api/rewards/${params.address}/?limit=10`),
+            fetch(`/api/executions/${params.address}?limit=10`),
         ])
         .then(([res1, res2, res3, res4, res5]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json()]))
         .then(([data1, data2, data3, data4, data5]) => {

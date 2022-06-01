@@ -90,7 +90,7 @@ export default function ContractsRankGrid() {
                         </TableCell>
 
                         <TableCell>
-                            Fees
+                            Fees Used
                         </TableCell>
                         
                     </TableRow>
@@ -121,7 +121,7 @@ export default function ContractsRankGrid() {
                                 {item.gas_used}
                             </TableCell>
                             <TableCell>
-                                {item.fees} utorii
+                                {item.fees?item.fees:0} utorii
                             </TableCell>
                         </TableRow>
                         );

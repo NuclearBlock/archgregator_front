@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -12,6 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import LaunchIcon from '@material-ui/icons/Launch';
 
 
 const useStyles = makeStyles({
@@ -30,12 +30,15 @@ export default function ContractsRewardGrid() {
     const classes = useStyles();
     const params = useParams();
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
-        let apiUrl ='/api/rewards/' + params.address + '/100';
+        setData(false);
+        setIsLoading(true);
+        
+        let apiUrl ='/api/rewards/' + params.address + '?limit=100';
         fetch(apiUrl)
         .then((response) => response.json())
         .then((data) => {
@@ -53,37 +56,45 @@ export default function ContractsRewardGrid() {
         fetchData();
     }, []);
 
-    if (isLoading) {
-        return <div><CircularProgress /></div>;
-    }
     return (
-        <Paper variant="outlined" square className={classes.root}>
+
+        <>
+        {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
+        
+        {data.length == 0 && <div className="loading-result">No data found</div>} 
+        
+        {data.length > 0 && (
+
             <TableContainer className={classes.container}>
                 <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>
+                        <TableCell align="center">
                             Date
                         </TableCell> 
 
-                        <TableCell>
+                        <TableCell align="right">
                             Block
                         </TableCell>
 
-                        <TableCell>
+                        {/* <TableCell>
                             Calculated Rewards
                         </TableCell> 
 
                         <TableCell>
                             Inflation Rewards
-                        </TableCell>  
+                        </TableCell>   */}
 
-                        <TableCell>
-                            Distributed Rewards
+                        <TableCell align="right">
+                            Distributed Amount
                         </TableCell> 
 
-                        <TableCell>
+                        {/* <TableCell>
                             Leftover Amount
+                        </TableCell>  */}
+
+                        <TableCell align="center">
+                            Details
                         </TableCell> 
                     </TableRow>
                 </TableHead>
@@ -92,24 +103,30 @@ export default function ContractsRewardGrid() {
                     .map((item, i) => {
                         return (
                         <TableRow key={i}>
-                            <TableCell>
+                            <TableCell align="center">
                                 {formatDate(item.reward_date)}
                             </TableCell>
-                            <TableCell>
+                            <TableCell align="right">
                                 {item.height}
                             </TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 {item.contract_rewards_amount.toFixed(2)} utorii
                             </TableCell>
                             <TableCell>
                                 {item.inflation_rewards_amount.toFixed(2)} utorii
-                            </TableCell>
-                            <TableCell>
-                                {item.distributed_rewards_amount.toFixed(2)} utorii
+                            </TableCell> */}
+                            <TableCell align="right">
+                                {item.distributed_rewards_amount} utorii
                             </TableCell>
 
-                            <TableCell>
+                            {/* <TableCell>
                                 {item.leftover_rewards_amount.toFixed(2)} utorii
+                            </TableCell> */}
+
+                            <TableCell align="center">
+                                <Link to={'/rewards/'+item.contract_address+'/'+item.height}>
+                                    See details&nbsp;<LaunchIcon fontSize="inherit"/>
+                                </Link>
                             </TableCell>
 
                         </TableRow>
@@ -118,6 +135,8 @@ export default function ContractsRewardGrid() {
                 </TableBody>
                 </Table>
             </TableContainer>
-        </Paper>
+
+        )}
+        </>
     );
 }

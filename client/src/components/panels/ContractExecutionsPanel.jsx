@@ -36,7 +36,7 @@ export default function ContractExecutionsPanel({ data, isLoading }) {
                 Last Executions:
             </div>   
 
-            {isLoading && <div className="circular-progress"><CircularProgress size="3rem" /></div>} 
+            {isLoading && <div className="text-progress">Loading data ...</div>}
 
             {data.length == 0 && <div className="loading-result">No data found</div>}
               

@@ -10,7 +10,7 @@ return (
             <Container maxWidth="lg">
                 <Grid container>
                     <Grid  item xs={12} spacing={2}>
-                        <span>Archway network Smart contract data aggregator</span>
+                        <span>Archway Protocol Smart contract data aggregator</span>
                     </Grid>
                 </Grid>
             </Container>

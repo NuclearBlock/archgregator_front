@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -26,6 +25,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import LaunchIcon from '@material-ui/icons/Launch';
 
 
 const useStyles = makeStyles({
@@ -102,15 +102,26 @@ export default function RewardsRankGrid() {
     })
 
     const [startDate, setStartDate] = useState(() => {
-        return new Date(window.sessionStorage.getItem("startDate")) || new Date(2022, 0, 1)
+        let startDate = window.sessionStorage.getItem("startDate")
+        if (startDate) {
+            return new Date(startDate)
+        } else {
+            return new Date(2022, 0, 1)
+        } 
     })
 
     const [endDate, setEndDate] = useState(() => {
-        return new Date(window.sessionStorage.getItem("endDate")) || new Date()
+        let endDate = window.sessionStorage.getItem("endDate")
+        if (endDate) {
+            return new Date(endDate)
+        } else {
+            return new Date()
+        } 
     })
 
     const handleRewardsType = (event) => {
         setRewardsType(event.target.value);
+        // TO-DO ... ?
         // if (event.target.value == 3) {
         //     setIsPremiun(false);
         // }
@@ -276,25 +287,28 @@ export default function RewardsRankGrid() {
                             <TableCell>
                                 Contract Label
                             </TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 Type
+                            </TableCell> */}
+                            <TableCell align="center">
+                                Calculations&nbsp;<CustomTooltip title="Count of rewards events"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell>
-                            <TableCell>
-                                Count&nbsp;<CustomTooltip title="Count of rewards events"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                            </TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 Total Distributed&nbsp;
                                 <CustomTooltip title="Total amount of distributed rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell>
                                 Total Calculated&nbsp;<CustomTooltip title="Total amount of calculated rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 Inflation Rewards&nbsp;<CustomTooltip title="Total amount of inflation rewards"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
-                            </TableCell>
+                            </TableCell> */}
                             {/* <TableCell>
                                 Gas Consumed&nbsp;<CustomTooltip title="Total Gas consumed"><HelpOutlineIcon className={classes.info}/></CustomTooltip>
                             </TableCell> */}
+                            <TableCell>
+                                Details
+                            </TableCell>
                         </TableRow>
                     </TableHead>
 
@@ -307,31 +321,37 @@ export default function RewardsRankGrid() {
                                     {i+1}
                                 </TableCell>
                                 <TableCell>
-                                    <Link component={RouterLink} to={"/contracts/"+item.contract_address} className={classes.link}>
-                                        {minimizeStr(item.contract_address)}
+                                    <Link to={"/contracts/"+item.contract_address} className={classes.link}>
+                                        {minimizeStr(item.contract_address, 8, 16)}
                                     </Link>  
                                 </TableCell>
                                 <TableCell>
                                     {item.label}
                                 </TableCell>
-                                <TableCell>
+                                {/* <TableCell>
                                     &nbsp;
+                                </TableCell> */}
+                                <TableCell align="center">
+                                    {item.calculations}
                                 </TableCell>
-                                <TableCell>
-                                    {item.count}
-                                </TableCell>
-                                <TableCell>
-                                    {item.sum_distributed_rewards}
-                                </TableCell>
+                                {/* <TableCell>
+                                    {item.sum_distributed_rewards} utorii
+                                </TableCell> */}
                                 <TableCell>
                                     {item.sum_calculated_rewards.toFixed(2)}
+                                    &nbsp;utorii
                                 </TableCell>
-                                <TableCell>
+                                {/* <TableCell>
                                     {item.sum_inflation_rewards.toFixed(2)}
-                                </TableCell>
+                                </TableCell> */}
                                 {/* <TableCell>
                                     {item.sum_gas_consumed}
                                 </TableCell> */}
+                                <TableCell>
+                                    <Link to={'/rewards/'+item.contract_address}>
+                                        See more&nbsp;<LaunchIcon fontSize="inherit"/>
+                                    </Link>
+                                </TableCell>
                             </TableRow>
                             );
                         })}

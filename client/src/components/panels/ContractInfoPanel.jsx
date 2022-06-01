@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import Chip from '@material-ui/core/Chip';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
@@ -19,7 +19,20 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import ContractInfoChart from '../charts/ContractInfoChart'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 
+const useStyles = makeStyles({
+    tooltip: {
+        padding: '10px 5px',
+        backgroundColor: '#333',
+        fontSize: '0.8rem',
+    },
+});
+
+const CustomTooltip = (props) => {
+    const classes = useStyles();
+    return <Tooltip arrow classes={classes} {...props} className='tooltip' placement="top"/>;
+}
 
 export default function ComtractInfoPanel({ info, summary, isLoading }) {
 
@@ -51,7 +64,7 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                             {/* {isLoading && <div className="circular-progress"><CircularProgress size="3rem" /></div>}  */}
                             {isLoading && <div className="text-progress">Loading data ...</div>} 
 
-                            {info.length == 0 && <div className="loading-result"> No info found</div>} 
+                            {info.length == 0 && <div className="contract-info-loading-result"> No info found</div>} 
 
                             {info.length > 0 && (
                             <Table size="small">
@@ -64,11 +77,14 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                                         Label:
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <Chip
+                                                        {/* <Chip
                                                             size="small"
                                                             label={item.label}
                                                             color="primary"
-                                                        />
+                                                        /> */}
+                                                        <span className="sticker">
+                                                            {item.label}
+                                                        </span>
                                                     </TableCell>
                                                 </TableRow>
                                                 : null
@@ -132,19 +148,21 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                                     </Hidden>    
                                                     &nbsp;
                                                     <Link to={'/tx/'+item.tx_hash}>
-                                                        <LaunchIcon fontSize="small" color="Primary"/>
+                                                        <LaunchIcon fontSize="inherit" color="Primary"/>
                                                     </Link>  
                                                 </TableCell>
                                             </TableRow>
                                             
-                                            {/* <TableRow>
+                                            <TableRow>
                                                 <TableCell width="40%">
-                                                    RAW Message:
+                                                    <Hidden xsDown >RAW </Hidden>Message:
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    <VisibilityIcon fontSize="small" color="Primary"/>
+                                                    <CustomTooltip title={JSON.stringify(item.raw_contract_message)}>
+                                                        <VisibilityIcon fontSize="inherit" color="Primary"/>
+                                                    </CustomTooltip>
                                                 </TableCell>
-                                            </TableRow>  */}
+                                            </TableRow> 
 
                                         </>
                                     )[0]}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from "react-router-dom";
 
 import Grid from '@material-ui/core/Grid';
 
@@ -7,17 +8,25 @@ import ContractExecutionsGrid from '../components/grids/ContractExecutionsGrid'
 
 function ContractExecutionPage() {
 
-  return (
+    const params = useParams();
+
+    return (
     
     <div cleaaName="main">
+
+        <Grid container spacing={0}>
+            <Grid  item xs={12} spacing={0}>
+                <div className="main-title">
+                    <h1>Smart contract executions</h1>
+                    <span>{params.address}</span>
+                </div>
+            </Grid>
+        </Grid>
 
         <Grid container item xs={12} spacing={0}>
             <ContractExecutionsGrid />
         </Grid>
 
-        <Grid container item xs={12} spacing={0}>
-            
-        </Grid>
         
     </div>
   )

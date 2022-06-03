@@ -4,8 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
 import ContractsRankGrid from '../components/grids/ContractsRankGrid'
-import ControlPanel2 from '../components/panels/ControlPanel2'
-
 
 function ContractsRankPage() {
 

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
+import { useParams, Link } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+
+import LaunchIcon from '@material-ui/icons/Launch';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles({
     root: {
@@ -21,16 +24,26 @@ const useStyles = makeStyles({
         '&:hover': { 
             TextDecoder: 'none',
         },
-    }
+    },
+    cell: {
+        width: '10px',
+    },
 });
+
+const rowsPerPage = 50;
 
 export default function ContractsRankGrid() {
 
     const classes = useStyles();
 
-    const formatAddr = (address) => {
-        return address.slice(0, 7) + "..." + address.slice(-10)
+    const minimizeStr = (str, start = 8, end = 8) => {
+        return str.slice(0, start) + "..." + str.slice(-end)
     }
+
+    const params = useParams();
+
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +51,13 @@ export default function ContractsRankGrid() {
 
     const fetchData = () => {
         setIsLoading(true);
-        fetch('/api/contracts/')
+
+        fetch(`/api/contracts/?limit=${rowsPerPage}&page=${page}`)
         .then((response) => response.json())
         .then((data) => {
             setIsLoading(false);
-            setData(data);
+            setHasMore(data.length >= rowsPerPage)
+            setData(oldData => ([...oldData, ...data]));
         })
         .catch((error) => {
             setIsLoading(false);
@@ -53,85 +68,126 @@ export default function ContractsRankGrid() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [page]);
     
     return (
         <>
 
-        {isLoading && <div className="progress-main"><CircularProgress size="4rem" /></div>} 
+            {!data.length && !isLoading && <div className="loading-result">No data found</div>}
 
-        {data.length > 0 && (
-        <>
-        <Paper variant="outlined" square className={classes.root}>
-            <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>
-                            Contract address
-                        </TableCell>
-                        <TableCell>
-                            Creator
-                        </TableCell>
-                        <TableCell>
-                            Label
-                        </TableCell>
+            {data.length > 0 && (  
 
-                        <TableCell>
-                            Contract type
-                        </TableCell>
+                <TableContainer className={classes.container}>
+                    <Table size="small">
+                    <TableHead>
+                        <TableRow>
 
-                        <TableCell>
-                            Executed
-                        </TableCell>
+                            <TableCell align="center" className={classes.cell}>
+                                #
+                            </TableCell>
 
-                        <TableCell>
-                            Gas Used
-                        </TableCell>
+                            <TableCell>
+                                Contract address
+                            </TableCell>
 
-                        <TableCell>
-                            Fees Used
-                        </TableCell>
-                        
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data
-                    .map((item) => {
-                        return (
-                        <TableRow hover>
                             <TableCell>
-                                <Link component={RouterLink} to={"/contracts/"+item.contract_address} className={classes.link}>
-                                    {formatAddr(item.contract_address)}
-                                </Link>  
+                                Creator
                             </TableCell>
+
                             <TableCell>
-                                {formatAddr(item.creator)}
+                                Label
                             </TableCell>
+
+                            {/* <TableCell>
+                                Contract type
+                            </TableCell> */}
+
+                            <TableCell align="center">
+                                Executed
+                            </TableCell>
+
+                            <TableCell align="center">
+                                Gas Used
+                            </TableCell>
+
                             <TableCell>
-                                {item.label}
+                                Fees Used
                             </TableCell>
-                            <TableCell>
-                                UNKNOWN
-                            </TableCell>
-                            <TableCell>
-                                {item.executed}
-                            </TableCell>
-                            <TableCell>
-                                {item.gas_used}
-                            </TableCell>
-                            <TableCell>
-                                {item.fees?item.fees:0} utorii
-                            </TableCell>
+
+                            <TableCell align="center">
+                                <VisibilityIcon fontSize="small" />  
+                            </TableCell>  
+                            
                         </TableRow>
-                        );
-                    })}
-                </TableBody>
-                </Table>
-            </TableContainer>
-        </Paper>
-        </>
-        )}
+                    </TableHead>
+                    <TableBody>
+                        {data
+                        .map((item, i) => {
+                            return (
+                            <TableRow hover>
+                                <TableCell align="center">
+                                    {i+1}
+                                </TableCell>
+
+                                <TableCell>
+                                    <Link to={"/contracts/"+item.contract_address} className={classes.link}>
+                                        {minimizeStr(item.contract_address)}
+                                    </Link>  
+                                </TableCell>
+
+                                <TableCell>
+                                    {minimizeStr(item.creator)}
+                                </TableCell>
+
+                                <TableCell>
+                                    {item.label}
+                                </TableCell>
+
+                                {/* <TableCell>
+                                    UNKNOWN
+                                </TableCell> */}
+
+                                <TableCell align="center">
+                                    {item.executed}
+                                </TableCell>
+
+                                <TableCell align="center">
+                                    {item.gas_used}
+                                </TableCell>
+
+                                <TableCell>
+                                    {item.fees?item.fees:0} utorii
+                                </TableCell>
+
+                                <TableCell align="center">
+                                    <Link to={'/contracts/'+item.contract_address}>
+                                        <LaunchIcon fontSize="small" color="Primary"/>
+                                    </Link>          
+                                </TableCell>  
+
+                            </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                    </Table>
+                </TableContainer>
+
+            )}
+
+            {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
+            
+            {!isLoading && hasMore && (
+                <div className="pagination">
+                    <Button 
+                        variant="outlined" 
+                        color="primary" 
+                        size="small"
+                        onClick={() => {setPage(page + 1)}}
+                    >
+                        Load next {rowsPerPage} rows
+                    </Button>
+                </div>
+            )}
 
         </>
     );

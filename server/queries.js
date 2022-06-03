@@ -54,37 +54,55 @@ const getRewardsToday = (request, response) => {
 
 
 const getCodesRank = (request, response) => {
-    pool.query('SELECT * FROM wasm_code ORDER BY height ASC LIMIT 15', (error, results) => {
-        if (error) {
-        throw error
-        }
-        response.status(200).json(results.rows)
-    })
-}
-
-const getCodeById = (request, response) => {
-    const id = parseInt(request.params.id)
-  
-    pool.query('SELECT * FROM wasm_code WHERE code_id = $1', [id], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(200).json(results.rows)
-    })
-}
-
-const getContractsRank = (request, response) => {
-
+  let page = 0;
   let limit = 50;
   for (let parameter in request.query) { 
     let value = request.query[parameter]
     if (parameter == 'limit') { 
-      if (value > 0 && value <= 100)
+      if (value > 0 && value <= 50)
       limit = value;
     }  
+    if (parameter == 'page') { 
+      if (value > 0) page = value;
+    } 
   }
+  let offset = page * limit;
 
-  pool.query('SELECT wc.contract_address, wc.creator, wc.label, count(wec.contract_address) as executed, sum(wec.gas_used) as gas_used, sum(wec.fees_amount) fees FROM wasm_contract wc LEFT JOIN wasm_execute_contract wec ON wc.contract_address = wec.contract_address GROUP BY wc.contract_address, wc.creator, wc.label ORDER BY executed DESC LIMIT $1;', [limit], (error, results) => {
+  pool.query('SELECT * FROM wasm_code ORDER BY height ASC LIMIT $1 OFFSET $2;', [limit, offset], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getCodeById = (request, response) => {
+  const id = parseInt(request.params.id)
+
+  pool.query('SELECT * FROM wasm_code WHERE code_id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getContractsRank = (request, response) => {
+  let page = 0;
+  let limit = 50;
+  for (let parameter in request.query) { 
+    let value = request.query[parameter]
+    if (parameter == 'limit') { 
+      if (value > 0 && value <= 50)
+      limit = value;
+    }  
+    if (parameter == 'page') { 
+      if (value > 0) page = value;
+    } 
+  }
+  let offset = page * limit;
+
+  pool.query('SELECT wc.contract_address, wc.creator, wc.label, count(wec.contract_address) as executed, sum(wec.gas_used) as gas_used, sum(wec.fees_amount) fees FROM wasm_contract wc LEFT JOIN wasm_execute_contract wec ON wc.contract_address = wec.contract_address GROUP BY wc.contract_address, wc.creator, wc.label ORDER BY executed DESC LIMIT $1 OFFSET $2;', [limit, offset], (error, results) => {
       if (error) {
       throw error
       }
@@ -93,8 +111,10 @@ const getContractsRank = (request, response) => {
 }
 
 const getRewardsRank = (request, response) => {
-  let conditions = [];
+  let page = 0;
   let limit = 100;
+  let conditions = [];
+
   for (let parameter in request.query) {
     let value = request.query[parameter]
     if (parameter == 'type') { 
@@ -120,9 +140,13 @@ const getRewardsRank = (request, response) => {
       if (value > 0 && value <= 100)
       limit = value;
     }  
+    if (parameter == 'page') { 
+      if (value > 0) page = value;
+    } 
   }
-  
+
   let where = ''
+
   conditions.forEach(function(condition, i) {
       //console.log(condition);
       if (i>0) { 
@@ -133,33 +157,37 @@ const getRewardsRank = (request, response) => {
       where += condition;
   });
 
-  // let qstr = 'SELECT cr.contract_address, wc.label, count(cr.contract_address), sum(cr.contract_rewards_amount) AS sum_calculated_rewards, sum(cr.inflation_rewards_amount) AS sum_inflation_rewards, sum(cr.distributed_rewards_amount) AS sum_distributed_rewards, sum(cr.leftover_rewards_amount) AS leftover_rewards, sum(cr.gas_consumed::decimal) AS sum_gas_consumed FROM contract_reward cr LEFT JOIN wasm_contract wc ON cr.contract_address=wc.contract_address' + where + ' GROUP BY cr.contract_address, wc.label ORDER BY sum_distributed_rewards DESC LIMIT $1;'
-  
-  let queryStr = 'SELECT cr.contract_address, wc.label, count(cr.contract_address) AS calculations, sum(cr.contract_rewards_amount) AS sum_calculated_rewards FROM contract_reward cr LEFT JOIN wasm_contract wc ON cr.contract_address=wc.contract_address' + where + ' GROUP BY cr.contract_address, wc.label ORDER BY sum_calculated_rewards DESC LIMIT $1;'
-  //console.log(qstr)
+  let offset = page * limit;
 
-  pool.query(queryStr, [limit], (error, results) => {
-      if (error) {
+  let queryStr = 'SELECT cr.contract_address, wc.label, count(cr.contract_address) AS calculations, sum(cr.contract_rewards_amount) AS sum_calculated_rewards FROM contract_reward cr LEFT JOIN wasm_contract wc ON cr.contract_address=wc.contract_address' + where + ' GROUP BY cr.contract_address, wc.label ORDER BY sum_calculated_rewards DESC LIMIT $1 OFFSET $2;'
+
+  pool.query(queryStr, [limit, offset], (error, results) => {
+    if (error) {
         throw error
-      }
-      response.status(200).json(results.rows)
+    }
+    response.status(200).json(results.rows)
   })
 }
 
 const getContractRewards = (request, response) => {
-  let limit = 100;
+  let page = 0;
+  let limit = 50;
   for (let parameter in request.query) { 
     let value = request.query[parameter]
     if (parameter == 'limit') { 
-      if (value > 0 && value <= 100)
+      if (value > 0 && value <= 50)
       limit = value;
     }  
+    if (parameter == 'page') { 
+      if (value > 0) page = value;
+    } 
   }
+  let offset = page * limit;
   const contractAddress = request.params.address
   
   // let queryStr = 'SELECT * FROM contract_reward WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;';
-  let queryStr = 'SELECT distinct(height), reward_date, contract_address, distributed_rewards_amount FROM contract_reward WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;';
-  pool.query(queryStr, [contractAddress, limit], (error, results) => {
+  let queryStr = 'SELECT distinct(height), reward_date, contract_address, distributed_rewards_amount FROM contract_reward WHERE contract_address = $1 ORDER BY height DESC LIMIT $2 OFFSET $3;';
+  pool.query(queryStr, [contractAddress, limit, offset], (error, results) => {
     if (error) {
       throw error
     }
@@ -181,20 +209,25 @@ const getContractRewardsForBlock = (request, response) => {
 }
 
 const getContractExecutions = (request, response) => {
-  let limit = 100;
+  let page = 0;
+  let limit = 50;
   for (let parameter in request.query) { 
     let value = request.query[parameter]
     if (parameter == 'limit') { 
-      if (value > 0 && value <= 100)
+      if (value > 0 && value <= 50)
       limit = value;
     }  
+    if (parameter == 'page') { 
+      if (value > 0) page = value;
+    } 
   }
+  let offset = page * limit;
   const contractAddress = request.params.address
-  pool.query('SELECT * FROM wasm_execute_contract WHERE contract_address = $1 ORDER BY height DESC LIMIT $2;', [contractAddress, limit], (error, results) => {
-      if (error) {
+  pool.query('SELECT * FROM wasm_execute_contract WHERE contract_address = $1 ORDER BY height DESC LIMIT $2 OFFSET $3;', [contractAddress, limit, offset], (error, results) => {
+    if (error) {
       throw error
-      }
-      response.status(200).json(results.rows)
+    }
+    response.status(200).json(results.rows)
   })
 }
 

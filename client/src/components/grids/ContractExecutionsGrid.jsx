@@ -2,75 +2,57 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useParams, Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 
+import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import Paper from '@material-ui/core/Paper';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 import LaunchIcon from '@material-ui/icons/Launch';
+import Button from '@material-ui/core/Button';
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
     },  
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'left',
-        // minWidth: '100%',
-        color: theme.palette.text.secondary,
-    },
-    arrow: {
-        color: theme.palette.common.black,
-    },
-    tooltip: {
-        fontSize: '1em',
-        backgroundColor: theme.palette.common.black,
-    },
-    table: {
-        width: '100%',
-        border: '',
-    },
-    tableContract: {
-        width: '70%',
-        border: '',
-    },
 }));
 
+const rowsPerPage = 50;
 
 export default function ContractExecutionsGrid() {
 
     const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "long", day: "numeric" }
+        const options = { year: "numeric", month: "long", day: "numeric", hour: '2-digit', minute:'2-digit', second: '2-digit' }
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
 
-    const formatAddr = (address) => {
-        return address.slice(0, 7) + "..." + address.slice(-7)
+    const minimizeStr = (str, start = 8, end = 8) => {
+        return str.slice(0, start) + "..." + str.slice(-end)
     }
-
-    const preventDefault = (event) => event.preventDefault();
 
     const classes = useStyles();
     const params = useParams();
+
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
+        setIsLoading(true);
 
-        let rewardsUrl = '/api/executions/' + params.address + '/5';
-        fetch(rewardsUrl)
+        fetch(`/api/executions/${params.address}?limit=${rowsPerPage}&page=${page}`)
         .then((response) => response.json())
         .then((data) => {
             setIsLoading(false);
-            setData(data);
+            setHasMore(data.length >= rowsPerPage)
+            setData(oldData => ([...oldData, ...data]));
         })
         .catch((error) => {
             setIsLoading(false);
@@ -81,35 +63,38 @@ export default function ContractExecutionsGrid() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [page]);
 
-    if (isLoading) {
-        return <div>Loading data...</div>;
-    }
 
     return (
         <>
-        <Grid item xs={12} spacing={0}>
-            <Paper square variant="outlined" className={classes.paper}> 
-                <Typography variant="button" gutterBottom>
-                    Last Executions:
-                </Typography>
 
-                <Table hover className={classes.table} size="small" aria-label="a dense table">
+        {data.length == 0 && !isLoading && <div className="loading-result">No data found</div>}
+
+        {data.length > 0 && (
+            <TableContainer className={classes.container}>
+                <Table className={classes.table} size="small">
                     <TableHead>
                         <TableRow>
+                            <TableCell align="center">Datetime</TableCell>
+                            <TableCell align="center">Block</TableCell>
                             <TableCell align="right">Sender</TableCell>
                             <TableCell align="right">Gas Used</TableCell>
                             <TableCell align="right">Fees</TableCell>
-                            <TableCell align="right">Tx</TableCell>
-                            <TableCell align="right">Block</TableCell>
+                            <TableCell align="center">Tx</TableCell>             
                         </TableRow>
                     </TableHead>
                     <TableBody>    
                     {data.map((row) => (
-                        <TableRow>
+                        <TableRow hover>
+                            <TableCell align="center">
+                                {formatDate(row.executed_at)}
+                            </TableCell> 
+                            <TableCell align="center">
+                                {row.height}
+                            </TableCell>   
                             <TableCell align="right">
-                                {formatAddr(row.sender)}
+                                {minimizeStr(row.sender, 8, 12)}
                             </TableCell> 
                             <TableCell align="right">
                                 {row.gas_used}
@@ -117,21 +102,33 @@ export default function ContractExecutionsGrid() {
                             <TableCell align="right">
                                 {row.fees_amount}
                             </TableCell> 
-                            <TableCell align="right">
+                            <TableCell align="center">
                                 <Link to={'/tx/'+row.tx_hash}>
                                     <LaunchIcon fontSize="small" color="Primary"/>
                                 </Link>          
-                            </TableCell> 
-                            <TableCell align="right">
-                                {row.height}
-                            </TableCell>                     
+                            </TableCell>                    
                         </TableRow>
                     ))}
                     </TableBody>
                 </Table>
-            </Paper>
-        </Grid>
+            </TableContainer>
 
+        )}
+        
+        {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
+ 
+        {!isLoading && hasMore && (
+            <div className="pagination">
+                <Button 
+                    variant="outlined" 
+                    color="primary" 
+                    size="small"
+                    onClick={() => {setPage(page + 1)}}
+                >
+                    Load next {rowsPerPage} rows
+                </Button>
+            </div>
+        )}
             
         </>
         

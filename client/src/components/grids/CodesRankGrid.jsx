@@ -1,40 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, Link } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
+import LaunchIcon from '@material-ui/icons/Launch';
+import Button from '@material-ui/core/Button';
 
-import Typography from '@material-ui/core/Typography';
-
-import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-
-
-const columns = [
-  { id: 'codeID', label: 'Code ID'},
-  { id: 'type', label: 'Type'},
-  { id: 'creator', label: 'Creator account'},
-  { id: 'size', label: 'Size\u00a0(kb)'},
-  { id: 'contractsCount', label: 'Contracts'},
-  { id: 'timestamp', label: 'Stored'},
-  { id: 'height', label: 'Block height'},
-];
-
-const columns_grid = [
-    { field: 'codeID', headerName: 'Code ID'},
-    { field: 'type', headerName: 'Type'},
-    { field: 'creator', headerName: 'Creator account'},
-    { field: 'size', headerName: 'Size\u00a0(kb)'},
-    { field: 'contractsCount', headerName: 'Contracts'},
-    { field: 'timestamp', headerName: 'Stored'},
-    { field: 'height', headerName: 'Block height'},
-];
 
 const useStyles = makeStyles({
   root: {
@@ -42,36 +21,48 @@ const useStyles = makeStyles({
   },
 });
 
+const rowsPerPage = 50;
+
 export default function CodesRankGrid() {
 
     const classes = useStyles();
 
-    const formatAddr = (address) => {
-        return address.slice(0, 8) + "..." + address.slice(-8)
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long", day: "numeric", hour: '2-digit', minute:'2-digit', second: '2-digit' }
+        return new Date(dateString).toLocaleDateString(undefined, options)
     }
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const minimizeStr = (str, start = 8, end = 8) => {
+        return str.slice(0, start) + "..." + str.slice(-end)
+    }
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k)); 
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    const params = useParams();
 
-    const [codes, setCodes] = useState([]);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+
+    const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
-        fetch('/api/codes')
+        setIsLoading(true);
+
+        fetch(`/api/codes?limit=${rowsPerPage}&page=${page}`)
         .then((response) => response.json())
         .then((data) => {
             setIsLoading(false);
-            setCodes(data);
+            setHasMore(data.length >= rowsPerPage)
+            setData(oldData => ([...oldData, ...data]));
         })
         .catch((error) => {
             setIsLoading(false);
@@ -82,80 +73,113 @@ export default function CodesRankGrid() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [page]);
 
-    if (isLoading) {
-        return <div>Loading data ...</div>;
-    }
     return (
         <>
-        {/* <ParametersBlock /> */}
-  
-            <Paper variant="outlined" square className={classes.root}>
+            {data.length == 0 && !isLoading && <div className="loading-result">No data found</div>}
 
-            {/* <DataGrid
-                rows={codes}
-                columns={columns_grid}
-                // pageSize={5}
-                // id={Math.random()}
-                getRowId={(row) => row.code_id}
-                components={{
-                    Toolbar: GridToolbar,
-                  }}
-                //   filterModel={{
-                //     items: [
-                //       { columnField: 'commodity', operatorValue: 'contains', value: 'rice' },
-                //     ],
-                //   }}
-            /> */}
-                
+            {data.length > 0 && (      
                 <TableContainer className={classes.container}>
-                    <Table stickyHeader aria-label="sticky table" size="small">
+                    <Table size="small">
                         <TableHead>
                             <TableRow>
-                            {columns.map((column) => (
-                                <TableCell>
-                                    {column.label}
+
+                                <TableCell align="center">
+                                    Code ID
                                 </TableCell>
-                            ))}
+
+                                <TableCell align="right">
+                                    Type
+                                </TableCell>
+
+                                <TableCell align="right">
+                                    Creator
+                                </TableCell>
+
+                                <TableCell align="right">
+                                    Size (Kb)
+                                </TableCell>
+
+                                <TableCell align="center">
+                                    Contracts
+                                </TableCell>
+
+                                <TableCell align="right">
+                                    Stored
+                                </TableCell>
+
+                                <TableCell align="center">
+                                    Block
+                                </TableCell>
+
+                                <TableCell align="center">
+                                    Tx
+                                </TableCell>
+
                             </TableRow>
                         </TableHead>
+
                         <TableBody>
-                            {codes.map((item) => {
+                            {data.map((item) => {
                                 return (
                                 <TableRow hover key={item.id}>
-                                    <TableCell>
+                                    <TableCell align="center">
                                         {item.code_id}
                                     </TableCell>
-                                    <TableCell>
-                                        <Typography variant="overline">
-                                            Unknown
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
 
-                                        {formatAddr(item.creator)}
+                                    <TableCell  align="right">
+                                        Unknown
                                     </TableCell>
-                                    <TableCell>
-                                        {item.size}
+
+                                    <TableCell  align="right">
+                                        {minimizeStr(item.creator, 8, 12)}
                                     </TableCell>
-                                    <TableCell>
+
+                                    <TableCell align="right">
+                                        {formatBytes(item.size)}
+                                    </TableCell>
+
+                                    <TableCell align="center">
                                         {item.contracts_count}
                                     </TableCell>
-                                    <TableCell>
-                                        {item.saved_at}
+
+                                    <TableCell align="right">
+                                        {formatDate(item.saved_at)}
                                     </TableCell>
-                                    <TableCell>
+
+                                    <TableCell align="center">
                                         {item.height}
                                     </TableCell>
+
+                                    <TableCell align="center">
+                                        <Link to={'/tx/'+item.tx_hash}>
+                                            <LaunchIcon fontSize="small" color="Primary"/>
+                                        </Link>          
+                                    </TableCell> 
                                 </TableRow>
                                 );
                             })}
                         </TableBody>
                     </Table>
                 </TableContainer>
+            )}
 
-            </Paper>
+            {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
+            
+            {!isLoading && hasMore && (
+                <div className="pagination">
+                    <Button 
+                        variant="outlined" 
+                        color="primary" 
+                        size="small"
+                        onClick={() => {setPage(page + 1)}}
+                    >
+                        Load next {rowsPerPage} rows
+                    </Button>
+                </div>
+            )}
+
         </>
     );
 }

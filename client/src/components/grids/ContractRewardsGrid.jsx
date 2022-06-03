@@ -12,6 +12,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LaunchIcon from '@material-ui/icons/Launch';
+import Button from '@material-ui/core/Button';
 
 
 const useStyles = makeStyles({
@@ -19,6 +20,8 @@ const useStyles = makeStyles({
     width: '100%',
   },
 });
+
+const rowsPerPage = 50;
 
 export default function ContractsRewardGrid() {
 
@@ -30,20 +33,22 @@ export default function ContractsRewardGrid() {
     const classes = useStyles();
     const params = useParams();
 
-    const [data, setData] = useState(false);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+
+    const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
-        setData(false);
         setIsLoading(true);
         
-        let apiUrl ='/api/rewards/' + params.address + '?limit=100';
-        fetch(apiUrl)
+        fetch(`/api/rewards/${params.address}?limit=${rowsPerPage}&page=${page}`)
         .then((response) => response.json())
         .then((data) => {
             setIsLoading(false);
-            setData(data);
+            setHasMore(data.length >= rowsPerPage)
+            setData(oldData => ([...oldData, ...data]));
         })
         .catch((error) => {
             setIsLoading(false);
@@ -54,19 +59,17 @@ export default function ContractsRewardGrid() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [page]);
 
     return (
 
         <>
-        {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
-        
-        {data.length == 0 && <div className="loading-result">No data found</div>} 
-        
-        {data.length > 0 && (
 
+        {data.length == 0 && !isLoading && <div className="loading-result">No data found</div>}
+
+        {data.length > 0 && (
             <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label="sticky table">
+                <Table size="small">
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">
@@ -102,7 +105,7 @@ export default function ContractsRewardGrid() {
                     {data
                     .map((item, i) => {
                         return (
-                        <TableRow key={i}>
+                        <TableRow hover>
                             <TableCell align="center">
                                 {formatDate(item.reward_date)}
                             </TableCell>
@@ -125,7 +128,9 @@ export default function ContractsRewardGrid() {
 
                             <TableCell align="center">
                                 <Link to={'/rewards/'+item.contract_address+'/'+item.height}>
-                                    See details&nbsp;<LaunchIcon fontSize="inherit"/>
+                                    <span className="see-details">
+                                        See details <LaunchIcon fontSize="small"/>
+                                    </span>
                                 </Link>
                             </TableCell>
 
@@ -135,8 +140,23 @@ export default function ContractsRewardGrid() {
                 </TableBody>
                 </Table>
             </TableContainer>
-
         )}
+        
+        {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
+
+        {!isLoading && hasMore && (
+            <div className="pagination">
+                <Button 
+                    variant="outlined" 
+                    color="primary" 
+                    size="small"
+                    onClick={() => {setPage(page + 1)}}
+                >
+                    Load next {rowsPerPage} rows
+                </Button>
+            </div>
+        )}
+
         </>
     );
 }

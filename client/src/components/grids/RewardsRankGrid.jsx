@@ -7,12 +7,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { LinearProgress } from '@material-ui/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -27,6 +27,8 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LaunchIcon from '@material-ui/icons/Launch';
 
+import Hidden from '@material-ui/core/Hidden';
+
 
 const useStyles = makeStyles({
     root: {
@@ -37,11 +39,18 @@ const useStyles = makeStyles({
         color: '#666',
     },
     tooltip: {
-        fontsize: '1.2rem',
+        fontSize: '0.8rem',
     },
     grid: {
         paddingBottom: '3px',
         textAlign: 'right',
+    },
+    gridOuter: {
+        marginBottom: '5px',
+        padding: '10px 5px 5px 5px',
+        textAlign: 'right',
+        border: '1px solid #eee',
+        // backgroundColor: '#f5f5f5',
     },
     gridcenter: {
         paddingBottom: '3px',
@@ -62,6 +71,8 @@ const useStyles = makeStyles({
     }
 ,});
 
+const rowsPerPage = 50;
+
 function CustomTooltip(props) {
     const classes = useStyles();
     return <Tooltip arrow classes={classes} {...props} className='tooltip' placement="bottom"/>;
@@ -75,17 +86,8 @@ export default function RewardsRankGrid() {
         return str.slice(0, start) + "..." + str.slice(-end)
     }
 
-    // const [page, setPage] = React.useState(0);
-    // const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    // const handleChangePage = (event, newPage) => {
-    //     setPage(newPage);
-    // };
-
-    // const handleChangeRowsPerPage = (event) => {
-    //     setRowsPerPage(+event.target.value);
-    //     setPage(0);
-    // };
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
 
     const [rewardsType, setRewardsType] = useState(() => {
         return window.sessionStorage.getItem("rewardsType") || 1
@@ -120,6 +122,7 @@ export default function RewardsRankGrid() {
     })
 
     const handleRewardsType = (event) => {
+        setPage(0);
         setRewardsType(event.target.value);
         // TO-DO ... ?
         // if (event.target.value == 3) {
@@ -127,43 +130,47 @@ export default function RewardsRankGrid() {
         // }
     }
     const handleIsPremium = (event) => {
+        setPage(0);
         setIsPremiun(event.target.checked);
     };
 
     const handleStartDateChange = (date) => {
+        setPage(0);
         setStartDate(date);
     };
     const handleEndDateChange = (date) => {
+        setPage(0);
         setEndDate(date);
     };
 
-    const [data, setData] = useState(false);
+    const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const fetchData = () => {
-        setData(false);
         setIsLoading(true);
-
-        let apiUrl = '/api/rewards/?'
         
-        apiUrl += 'type=' + rewardsType
+        let apiUrl = `/api/rewards/?type=${rewardsType}`;
+
         if (!isPremium) {
-            apiUrl += '&premium=' + isPremium
+            apiUrl += `&premium=${isPremium}`;
         }
 
         if (startDate) {
-            apiUrl += '&startdate=' + startDate.toISOString()
+            apiUrl += `&startdate=${startDate.toISOString()}`;
         }
         if (endDate) {
-            apiUrl += '&enddate=' + endDate.toISOString()
+            apiUrl += `&enddate=${endDate.toISOString()}`;
         }
+
+        apiUrl += `&limit=${rowsPerPage}&page=${page}`;
         
         fetch(apiUrl)
         .then((response) => response.json())
         .then((data) => {
             setIsLoading(false);
-            setData(data);
+            setHasMore(data.length >= rowsPerPage)
+            setData(oldData => ([...oldData, ...data]));
         })
         .catch((error) => {
             setIsLoading(false);
@@ -172,110 +179,109 @@ export default function RewardsRankGrid() {
         });
     };
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
-
     useEffect(() => {
+        if (page == 0) {
+            setData([]);
+        }
         window.sessionStorage.setItem("rewardsType", rewardsType);
         window.sessionStorage.setItem("isPremium", isPremium);
         window.sessionStorage.setItem("startDate", startDate);
         window.sessionStorage.setItem("endDate", endDate);
         fetchData();
-    }, [rewardsType, isPremium, startDate, endDate]);
+    }, [page, rewardsType, isPremium, startDate, endDate]);
     
     return (
 
         <>
-
-        {/* {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>}  */}
-        
-        <Grid item sm={6} spacing={0} className={classes.grid}>
+        <Grid item xs={12} spacing={0} className={classes.gridOuter}>
             <Grid container>
-                <Grid item xs={6} spacing={0} className={classes.grid}>
-                    <FormControl className={classes.select}>
-                        <InputLabel id="rewards-type">Rewards type</InputLabel>
-                        <Select
-                            autoWidth="true"
-                            labelId="rewards-type-select-label"
-                            id="rewards-type-select"
-                            value={rewardsType}
-                            onChange={handleRewardsType}
-                            >
-                            <MenuItem value={1}>All calculations</MenuItem>
-                            <MenuItem value={2}>Developer rewards</MenuItem>
-                            <MenuItem value={3}>Users fees subsidies</MenuItem>
-                        </Select>
-                    </FormControl>
                 
+                <Grid item sm={6} spacing={0} className={classes.grid}>
+                    <Grid container>
+
+                        <Grid item xs={6} spacing={0} className={classes.grid}>
+                            <FormControl className={classes.select}>
+                                <InputLabel id="rewards-type">Rewards type</InputLabel>
+                                <Select
+                                    autoWidth="true"
+                                    labelId="rewards-type-select-label"
+                                    id="rewards-type-select"
+                                    value={rewardsType}
+                                    onChange={handleRewardsType}
+                                    >
+                                    <MenuItem value={1}>All calculations</MenuItem>
+                                    <MenuItem value={2}>Developer rewards</MenuItem>
+                                    <MenuItem value={3}>Users fees subsidies</MenuItem>
+                                </Select>
+                            </FormControl>
+                        
+                        </Grid>
+
+                        <Grid item xs={6} spacing={0} className={classes.grid}>
+                            <FormControlLabel
+                                className={classes.switch}
+                                value="premium"
+                                control={<Switch color="primary" size="small" checked={isPremium} onChange={handleIsPremium}/>}
+                                label={<>Premium <Hidden xsDown > contracts</Hidden></>}
+                                labelPlacement="start"
+                                disabled={rewardsType == 3 ? true : false}
+                            />
+                        </Grid> 
+
+                    </Grid>
+                    
                 </Grid>
-
-                <Grid item xs={6} spacing={0} className={classes.gridcenter}>
-                    <FormControlLabel
-                        className={classes.switch}
-                        value="premium"
-                        control={<Switch color="primary" size="small" checked={isPremium} onChange={handleIsPremium}/>}
-                        label="Premium contracts"
-                        labelPlacement="start"
-                        disabled={rewardsType == 3 ? true : false}
-                    />
-                </Grid> 
-
+                
+                <Grid item sm={6} spacing={0} className={classes.gridcenter}>
+                    <Grid container>
+                        <Grid item xs={6} spacing={0} className={classes.grid}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                                <KeyboardDatePicker
+                                    // className={classes.picker}
+                                    disableToolbar
+                                    variant="inline"
+                                    format="MM/dd/yyyy"
+                                    margin="none"
+                                    id="start-date-picker"
+                                    label="Start date"
+                                    value={startDate}
+                                    onChange={handleStartDateChange}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item xs={6} spacing={0} className={classes.grid}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                                <KeyboardDatePicker
+                                    disableToolbar
+                                    variant="inline"
+                                    format="MM/dd/yyyy"
+                                    margin="none"
+                                    id="end-date-picker"
+                                    label="End date"
+                                    value={endDate}
+                                    onChange={handleEndDateChange}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
-            
         </Grid>
+        
+        {!data.length && !isLoading && <div className="loading-result">No data found</div>}
 
-        <Grid item sm={6} spacing={0} className={classes.gridcenter}>
-            <Grid container>
-                <Grid item xs={6} spacing={0} className={classes.grid}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                        <KeyboardDatePicker
-                            // className={classes.picker}
-                            disableToolbar
-                            variant="inline"
-                            format="MM/dd/yyyy"
-                            margin="none"
-                            id="start-date-picker"
-                            label="Start date"
-                            value={startDate}
-                            onChange={handleStartDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
-                </Grid>
-                <Grid item xs={6} spacing={0} className={classes.grid}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                        <KeyboardDatePicker
-                            disableToolbar
-                            variant="inline"
-                            format="MM/dd/yyyy"
-                            margin="none"
-                            id="end-date-picker"
-                            label="End date"
-                            value={endDate}
-                            onChange={handleEndDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
-                </Grid>
-            </Grid>
-        </Grid>
-        
-        {/* {isLoading && <div className="linear-progress"><LinearProgress /></div>}  */}
-        {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
-        
-        {data.length == 0 && <div className="loading-result">No data found</div>} 
-        
         {data.length > 0 && (
             <>
             <Grid item xs={12} spacing={0}>
             
                 <TableContainer className={classes.container}>
-                    <Table stickyHeader aria-label="sticky table">
+                    <Table size="small">
                     <TableHead>
                         <TableRow >
                             <TableCell>
@@ -349,7 +355,9 @@ export default function RewardsRankGrid() {
                                 </TableCell> */}
                                 <TableCell>
                                     <Link to={'/rewards/'+item.contract_address}>
-                                        See more&nbsp;<LaunchIcon fontSize="inherit"/>
+                                        <span className="see-details">
+                                            See more&nbsp;<LaunchIcon fontSize="small"/>
+                                        </span>
                                     </Link>
                                 </TableCell>
                             </TableRow>
@@ -357,10 +365,38 @@ export default function RewardsRankGrid() {
                         })}
                     </TableBody>
                     </Table>
+                    
+                    {data.lenght > rowsPerPage && (
+                        <div className="pagination">
+                            <Button 
+                                variant="outlined" 
+                                color="primary" 
+                                size="small"
+                            >
+                                Load next {rowsPerPage} rows
+                            </Button>
+                        </div>
+                    )}
+
                 </TableContainer>
 
             </Grid>
             </>
+        )}
+
+        {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 
+            
+        {!isLoading && hasMore && (
+            <div className="pagination">
+                <Button 
+                    variant="outlined" 
+                    color="primary" 
+                    size="small"
+                    onClick={() => {setPage(page + 1)}}
+                >
+                    Load next {rowsPerPage} rows
+                </Button>
+            </div>
         )}
 
         </>

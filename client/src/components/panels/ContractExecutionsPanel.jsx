@@ -41,6 +41,7 @@ export default function ContractExecutionsPanel({ data, isLoading }) {
             {data.length == 0 && <div className="loading-result">No data found</div>}
               
             {data.length > 0 && (
+                <>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
@@ -80,6 +81,11 @@ export default function ContractExecutionsPanel({ data, isLoading }) {
                     ))}
                     </TableBody>
                 </Table>
+
+                <div className='see-more'>
+                    <Link to={'/executions/'+params.address}>See all executions&nbsp;<LaunchIcon fontSize="small"/></Link>
+                </div>
+                </>
             )}
 
         </div>

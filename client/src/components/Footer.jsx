@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import TelegramIcon from '@material-ui/icons/Telegram';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import Twitter from '@material-ui/icons/Twitter';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,13 +38,17 @@ export default function Footer() {
                             <span>From </span><b>Nuclear Block [one]</b>
 
                             <hr/>
+
+                            <a href="https://twitter.com/nuclearblockone" target="_blank" class="footer-icon">
+                                <TwitterIcon fontSize="medium" className={classes.icon}/>
+                            </a>
                             
                             <a href="https://t.me/nuclearblock" target="_blank" class="footer-icon">
-                                <TelegramIcon className={classes.icon}/>
+                                <TelegramIcon fontSize="medium" className={classes.icon}/>
                             </a>
 
                             <a href="https://github.com/nuclearblock" target="_blank" class="footer-icon">
-                                <GitHubIcon className={classes.icon}/>
+                                <GitHubIcon fontSize="medium" className={classes.icon}/>
                             </a>
 
 

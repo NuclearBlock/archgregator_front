@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
 
+import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -13,6 +14,12 @@ import { LinearProgress } from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
 import LaunchIcon from '@material-ui/icons/Launch';
 import Hidden from '@material-ui/core/Hidden';
+
+import TimelineIcon from '@material-ui/icons/Timeline';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import CopyToClipboard from '../../utils/CopyToClipboard';
 
@@ -33,6 +40,18 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': { 
             TextDecoder: 'none',
         },
+    },
+    accordion: {
+        border: 'none',
+        boxShadow: 'none',
+    },
+    accordionSummary: {
+        color: '#f1592a',
+        textTransform: 'uppercase',
+        fontSize: '0.9rem',
+    },
+    accordionTable: {
+        fontSize: '0.7rem',
     }
 }));
 
@@ -185,6 +204,98 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
 
             )}
        
+            {data.length > 1 &&
+
+                <Accordion square className={classes.accordion} >
+                    <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    id="metadata-history-header"
+                    className={classes.accordionSummary}
+                    >
+                        <TimelineIcon fontSize="small" />&nbsp;Metadata history
+                    </AccordionSummary>
+
+                    <AccordionDetails>
+                        <TableContainer className={classes.container}>
+                        <Table size="small" className={classes.accordionTable}>
+                            <TableHead>
+                                <TableRow hover size='small'>
+                                    <TableCell align="right">
+                                        Block
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        Datetme
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        Developer
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        Reward address
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        Premium
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        Rebate to user
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        Tx
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {data.slice(1).map((item, i) =>
+                                    
+                                    <TableRow hover size='small'>
+                                        <TableCell align="right">
+                                            {item.height}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {formatDate(item.saved_at)}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {minimizeStr(item.developer_address)}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {minimizeStr(item.reward_address)}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Switch
+                                                checked={item.collect_premium}
+                                                color="primary"
+                                                name="checkedB"
+                                                size="small"
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />
+                                            {item.premium_percentage_charged && ' (' + item.premium_percentage_charged + '%)'}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Switch
+                                                checked={item.gas_rebate_to_user}
+                                                color="primary"
+                                                name="checkedB"
+                                                size="small"
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Link to={'/tx/'+item.tx_hash}>
+                                                <LaunchIcon fontSize="inherit" color="Primary"/>
+                                            </Link> 
+                                        </TableCell>
+                                    </TableRow>
+
+                                )}
+                            </TableBody>
+                        </Table>   
+                        </TableContainer>
+
+                    </AccordionDetails>
+                </Accordion>
+
+            }
+
+
         </div>       
     );
 

@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LaunchIcon from '@material-ui/icons/Launch';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Button from '@material-ui/core/Button';
 
 
@@ -114,7 +115,7 @@ export default function CodesRankGrid() {
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    Tx
+                                    <MoreHorizIcon fontSize="small" /> 
                                 </TableCell>
 
                             </TableRow>
@@ -153,7 +154,7 @@ export default function CodesRankGrid() {
                                     </TableCell>
 
                                     <TableCell align="center">
-                                        <Link to={'/tx/'+item.tx_hash}>
+                                        <Link to={'/codes/'+item.code_id}>
                                             <LaunchIcon fontSize="small" color="Primary"/>
                                         </Link>          
                                     </TableCell> 

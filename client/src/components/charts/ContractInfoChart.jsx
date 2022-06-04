@@ -39,7 +39,7 @@ export default function ContractInfoChart() {
 
             {isLoading && <div className="linear-progress"><LinearProgress /></div>}
 
-            {data.length == 0 && <div className="loading-result">No data found</div>}
+            {data.length == 0 && <div className="chart-loading-result">No data found</div>}
               
             {data.length > 0 &&
                 <AreaChart

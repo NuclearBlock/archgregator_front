@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import LaunchIcon from '@material-ui/icons/Launch';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 
@@ -115,7 +115,7 @@ export default function ContractsRankGrid() {
                             </TableCell>
 
                             <TableCell align="center">
-                                <VisibilityIcon fontSize="small" />  
+                                <MoreHorizIcon fontSize="small" />  
                             </TableCell>  
                             
                         </TableRow>

@@ -255,9 +255,11 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                         </TableCell>
                                         <TableCell align="right">
                                             {minimizeStr(item.developer_address)}
+                                            {item.developer_address && <CopyToClipboard textToCopy={item.developer_address} notification="snackbar" />}
                                         </TableCell>
                                         <TableCell align="right">
                                             {minimizeStr(item.reward_address)}
+                                            {item.reward_address && <CopyToClipboard textToCopy={item.reward_address} notification="snackbar" />}
                                         </TableCell>
                                         <TableCell align="center">
                                             <Switch

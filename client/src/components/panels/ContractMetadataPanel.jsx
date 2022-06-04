@@ -14,17 +14,13 @@ import Switch from '@material-ui/core/Switch';
 import LaunchIcon from '@material-ui/icons/Launch';
 import Hidden from '@material-ui/core/Hidden';
 
+import CopyToClipboard from '../../utils/CopyToClipboard';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
     },  
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'left',
-        // minWidth: '100%',
-        color: theme.palette.text.secondary,
-    },
     arrow: {
         color: theme.palette.common.black,
     },
@@ -32,18 +28,18 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '1em',
         backgroundColor: theme.palette.common.black,
     },
-    table: {
-        width: '100%',
-        border: '',
-    },
-    tableContract: {
-        width: '70%',
-        border: '',
-    },
+    link: {
+        color: '#333',
+        '&:hover': { 
+            TextDecoder: 'none',
+        },
+    }
 }));
 
 
 export default function ComtractMetadataPanel({ data, isLoading }) {
+
+    const classes = useStyles();
 
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric", hour: '2-digit', minute:'2-digit', second: '2-digit' }
@@ -94,6 +90,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                     <Hidden smUp >
                                         {minimizeStr(item.developer_address, 12, 12)}
                                     </Hidden> 
+                                    <CopyToClipboard textToCopy={item.developer_address} />
                                 </TableCell>
                             </TableRow>
 
@@ -109,6 +106,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                     <Hidden smUp >                         
                                         {minimizeStr(item.reward_address, 12, 12)}
                                     </Hidden> 
+                                    <CopyToClipboard textToCopy={item.reward_address} />
                                 </TableCell>
                             </TableRow>
 
@@ -156,16 +154,16 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                     <Hidden xsDown >Metadata </Hidden>Transaction:
                                 </TableCell>
                                 <TableCell align="left">
-                                    <Hidden xsDown >
-                                        {item.tx_hash}             
-                                    </Hidden> 
-                                    <Hidden smUp >
-                                        {minimizeStr(item.tx_hash, 10, 10)}
-                                    </Hidden> 
-                                    &nbsp;
-                                    <Link to={'/tx/'+item.tx_hash}>
-                                        <LaunchIcon fontSize="inherit" color="Primary"/>
+                                    <Link to={'/tx/'+item.tx_hash} className={classes.link}>
+                                        <Hidden xsDown >
+                                            {item.tx_hash}             
+                                        </Hidden> 
+                                        <Hidden smUp >
+                                            {minimizeStr(item.tx_hash, 10, 10)}
+                                        </Hidden>  
+                                        {/* <LaunchIcon fontSize="inherit" color="Primary"/> */}
                                     </Link> 
+                                    <CopyToClipboard textToCopy={item.tx_hash} />
                                 </TableCell>
                             </TableRow>
 

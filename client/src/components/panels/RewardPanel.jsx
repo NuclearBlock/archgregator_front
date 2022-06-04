@@ -11,7 +11,11 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { LinearProgress } from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import Hidden from '@material-ui/core/Hidden';
+
+import CopyToClipboard from '../../utils/CopyToClipboard';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ComtractMetadataPanel({ data, isLoading }) {
+export default function RewardPanel({ data, isLoading }) {
 
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric", hour: '2-digit', minute:'2-digit', second: '2-digit' }
@@ -75,7 +79,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                     <>
                     <TableHead className={classes.tableHead}>
                         <TableRow>
-                            <TableCell width="100%">Main Data</TableCell>                     
+                            <TableCell >Main Data</TableCell>                     
                         </TableRow>
                     </TableHead>
 
@@ -114,9 +118,10 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                         {data[0].contract_address}
                                     </Hidden> 
                                     <Hidden smUp >
-                                        {minimizeStr(data[0].contract_address, 8, 14)}
+                                        {minimizeStr(data[0].contract_address, 8, 10)}
                                     </Hidden> 
-                                </Link> 
+                                </Link>
+                                <CopyToClipboard textToCopy={data[0].contract_address} /> 
                             </TableCell>
                         </TableRow>
 
@@ -126,7 +131,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                         <>
                         <TableHead className={classes.tableHead}>
                             <TableRow>
-                                <TableCell width="100%">
+                                <TableCell >
                                     <Hidden xsDown >Rewards </Hidden>metadata
                                 </TableCell>                     
                             </TableRow>
@@ -143,8 +148,9 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                         {data[0].developer_address}
                                     </Hidden> 
                                     <Hidden smUp >
-                                        {minimizeStr(data[0].developer_address, 8, 14)}
+                                        {minimizeStr(data[0].developer_address, 8, 10)}
                                     </Hidden> 
+                                    <CopyToClipboard textToCopy={data[0].developer_address} />
                                 </TableCell>
                             </TableRow>
                         
@@ -157,8 +163,9 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                         {data[0].reward_address}
                                     </Hidden> 
                                     <Hidden smUp >
-                                        {minimizeStr(data[0].reward_address, 8, 14)}
+                                        {minimizeStr(data[0].reward_address, 8, 10)}
                                     </Hidden> 
+                                    <CopyToClipboard textToCopy={data[0].reward_address} />
                                 </TableCell>
                             </TableRow>
 
@@ -194,19 +201,28 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                         </>
                     )}
 
+                    {/* <TableHead className={classes.tableHead}>
+                        <TableRow>
+                            <TableCell width="40%">Gas consumed:</TableCell> 
+                            <TableCell align="left">
+                                {data[0].gas_consumed}
+                            </TableCell>                      
+                        </TableRow>
+                    </TableHead> */}
+
                     <TableHead className={classes.tableHead}>
                         <TableRow>
-                            <TableCell width="100%">Calculations:</TableCell>                     
+                            <TableCell>Calculations:</TableCell>                   
                         </TableRow>
                     </TableHead>
-
-                    {/* <h4>Calculations</h4> */}
 
                     <TableBody>
                         {data.map((item, i) =>
                             <TableRow>
                                 <TableCell width="40%">
-                                    &nbsp;&nbsp;<Hidden xsDown >Calculation </Hidden>amount #{i+1}:
+                                    &nbsp;
+                                    <ArrowRightIcon fontSize="inherit" color="primary" />
+                                    amount #{i+1}:
                                 </TableCell>
                                 <TableCell align="left">
                                     {item.contract_rewards_amount}

@@ -8,6 +8,8 @@ import ContractMetadataPanel from '../components/panels/ContractMetadataPanel'
 import ContractExecutionsPanel from '../components/panels/ContractExecutionsPanel'
 import ContractRewardsPanel from '../components/panels/ContractRewardsPanel'
 
+import CopyToClipboard from '../utils/CopyToClipboard';
+
 
 function ContractInfoPage() {
 
@@ -66,6 +68,7 @@ function ContractInfoPage() {
                     <div className="main-title">
                         <h1>Smart contract details</h1>
                         <span>{params.address}</span>
+                        <CopyToClipboard textToCopy={params.address} />
                     </div>
                 </Grid>
             </Grid>

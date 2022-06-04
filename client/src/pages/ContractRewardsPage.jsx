@@ -4,6 +4,8 @@ import { Routes, Route, useParams } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 
 import ContractRewardsGrid from '../components/grids/ContractRewardsGrid'
+import CopyToClipboard from '../utils/CopyToClipboard';
+
 
 export default function ContractRewardsPage() {
 
@@ -18,6 +20,7 @@ export default function ContractRewardsPage() {
                     <div className="main-title">
                         <h1>Smart contract rewards</h1>
                         <span>{params.address}</span>
+                        <CopyToClipboard textToCopy={params.address} />
                     </div>
                 </Grid>
             </Grid>

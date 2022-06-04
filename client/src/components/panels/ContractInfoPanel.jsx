@@ -21,12 +21,20 @@ import ContractInfoChart from '../charts/ContractInfoChart'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import CopyToClipboard from '../../utils/CopyToClipboard';
+
 const useStyles = makeStyles({
     tooltip: {
         padding: '10px 5px',
         backgroundColor: '#333',
         fontSize: '0.8rem',
     },
+    link: {
+        color: '#333',
+        '&:hover': { 
+            TextDecoder: 'none',
+        },
+    }
 });
 
 const CustomTooltip = (props) => {
@@ -36,6 +44,8 @@ const CustomTooltip = (props) => {
 
 export default function ComtractInfoPanel({ info, summary, isLoading }) {
 
+    const classes = useStyles();
+    
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric", hour: '2-digit', minute:'2-digit', second: '2-digit' }
         return new Date(dateString).toLocaleDateString(undefined, options)
@@ -104,7 +114,8 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                                     Creator <Hidden xsDown >address:</Hidden>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    {minimizeStr(item.creator, 8, 16)}
+                                                    {minimizeStr(item.creator, 8, 18)}
+                                                    <CopyToClipboard textToCopy={item.creator} />
                                                 </TableCell>
                                             </TableRow>
 
@@ -113,7 +124,8 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                                     Admin <Hidden xsDown >address:</Hidden>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    {minimizeStr(item.admin, 8, 16)}
+                                                    {minimizeStr(item.admin, 8, 18)}
+                                                    <CopyToClipboard textToCopy={item.admin} />
                                                 </TableCell>
                                             </TableRow>
 
@@ -137,24 +149,6 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
 
                                             <TableRow>
                                                 <TableCell width="40%">
-                                                    Tx:
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Hidden xsDown >
-                                                        {minimizeStr(item.tx_hash, 15, 15)}
-                                                    </Hidden> 
-                                                    <Hidden smUp >
-                                                        {minimizeStr(item.tx_hash)}
-                                                    </Hidden>    
-                                                    &nbsp;
-                                                    <Link to={'/tx/'+item.tx_hash}>
-                                                        <LaunchIcon fontSize="inherit" color="Primary"/>
-                                                    </Link>  
-                                                </TableCell>
-                                            </TableRow>
-                                            
-                                            <TableRow>
-                                                <TableCell width="40%">
                                                     <Hidden xsDown >RAW </Hidden>Message:
                                                 </TableCell>
                                                 <TableCell align="left">
@@ -163,6 +157,23 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                                     </CustomTooltip>
                                                 </TableCell>
                                             </TableRow> 
+
+                                            <TableRow>
+                                                <TableCell width="40%">
+                                                    Tx:
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Link to={'/tx/'+item.tx_hash} className={classes.link}>
+                                                        <Hidden xsDown >
+                                                            {minimizeStr(item.tx_hash, 13, 13)}
+                                                        </Hidden> 
+                                                        <Hidden smUp >
+                                                            {minimizeStr(item.tx_hash)}
+                                                        </Hidden>    
+                                                    </Link>  
+                                                    <CopyToClipboard textToCopy={item.tx_hash} />
+                                                </TableCell>
+                                            </TableRow>
 
                                         </>
                                     )[0]}

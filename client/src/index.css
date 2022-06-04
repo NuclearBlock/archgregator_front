@@ -526,3 +526,28 @@ footer .footer-icon {
   text-align: center;
   width: 100%;
 }
+
+.copy {
+  display: inline-flex;
+  padding: 0 0 0 5px;
+  cursor: pointer;
+}
+
+.copy svg {
+  color: #ccc;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.copy svg:hover {
+  color: #f1592a;
+}
+
+.copy span {
+  margin: 4px 0 0 5px;
+  transition: all 0.5s ease;
+  color: #f1592a;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  font-weight: 500;
+}

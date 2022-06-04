@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 
 import ContractExecutionsGrid from '../components/grids/ContractExecutionsGrid'
-
+import CopyToClipboard from '../utils/CopyToClipboard';
 
 function ContractExecutionPage() {
 
@@ -19,6 +19,7 @@ function ContractExecutionPage() {
                 <div className="main-title">
                     <h1>Smart contract executions</h1>
                     <span>{params.address}</span>
+                    <CopyToClipboard textToCopy={params.address} />
                 </div>
             </Grid>
         </Grid>

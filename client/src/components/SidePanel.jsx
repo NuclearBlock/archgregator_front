@@ -7,6 +7,7 @@ import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
 import PollIcon from '@material-ui/icons/Poll';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import CodeIcon from '@material-ui/icons/Code';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -51,7 +52,8 @@ export default function SidePanel() {
                     <Link component={RouterLink} to="/">
                         <RightTooltip title="Dashboard">
                             <IconButton>
-                                <PollIcon justifyContent="center" className={classes.icon}/>
+                                {/* <PollIcon justifyContent="center" className={classes.icon}/> */}
+                                <DashboardIcon justifyContent="center" className={classes.icon}/>
                             </IconButton>
                         </RightTooltip>    
                     </Link> 

@@ -292,7 +292,7 @@ const getContractSummary = (request, response) => {
 const getContractMetadata = (request, response) => {
   const contractAddress = request.params.address
 
-  pool.query('SELECT * FROM contract_metadata WHERE contract_address = $1;', [contractAddress], (error, results) => {
+  pool.query('SELECT * FROM contract_metadata WHERE contract_address = $1 ORDER BY height DESC;', [contractAddress], (error, results) => {
     if (error) {
     throw error
     }

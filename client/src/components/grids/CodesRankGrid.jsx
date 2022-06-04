@@ -102,9 +102,9 @@ export default function CodesRankGrid() {
                                     Size (Kb)
                                 </TableCell>
 
-                                <TableCell align="center">
+                                {/* <TableCell align="center">
                                     Contracts
-                                </TableCell>
+                                </TableCell> */}
 
                                 <TableCell align="right">
                                     Stored
@@ -141,9 +141,9 @@ export default function CodesRankGrid() {
                                         {formatBytes(item.size)}
                                     </TableCell>
 
-                                    <TableCell align="center">
+                                    {/* <TableCell align="center">
                                         {item.contracts_count}
-                                    </TableCell>
+                                    </TableCell> */}
 
                                     <TableCell align="right">
                                         {formatDate(item.saved_at)}

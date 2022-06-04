@@ -109,7 +109,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                     <Hidden smUp >
                                         {minimizeStr(item.developer_address, 12, 12)}
                                     </Hidden> 
-                                    <CopyToClipboard textToCopy={item.developer_address} />
+                                    {item.developer_address && <CopyToClipboard textToCopy={item.developer_address} />}
                                 </TableCell>
                             </TableRow>
 
@@ -125,7 +125,7 @@ export default function ComtractMetadataPanel({ data, isLoading }) {
                                     <Hidden smUp >                         
                                         {minimizeStr(item.reward_address, 12, 12)}
                                     </Hidden> 
-                                    <CopyToClipboard textToCopy={item.reward_address} />
+                                    {item.reward_address && <CopyToClipboard textToCopy={item.reward_address} />}
                                 </TableCell>
                             </TableRow>
 

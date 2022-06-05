@@ -87,7 +87,7 @@ export default function RewardsRankGrid() {
     }
 
     const [page, setPage] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMore, setHasMore] = useState(false);
 
     const [rewardsType, setRewardsType] = useState(() => {
         return window.sessionStorage.getItem("rewardsType") || 1

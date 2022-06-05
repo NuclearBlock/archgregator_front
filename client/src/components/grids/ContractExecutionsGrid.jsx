@@ -38,7 +38,7 @@ export default function ContractExecutionsGrid() {
     const params = useParams();
 
     const [page, setPage] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMore, setHasMore] = useState(false);
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);

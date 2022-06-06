@@ -63,9 +63,9 @@ function App() {
                 <Route path="/contracts" element={<ContractsRankPage />} />
                     <Route path="/contracts/:address" element={<ContractInfoPage />} />
                 <Route path="/codes" element={<CodesRankPage />} />
-                  <Route path="/codes/:id" element={<CodePage />} />
+                  <Route path="/codes/:code_id" element={<CodePage />} />
                 <Route path="/executions/:address" element={<ContractsExecutionsPage />} />
-                <Route path="/tx/:hash" element={<TxPage />} />
+                <Route path="/tx/:tx_hash" element={<TxPage />} />
                 <Route path="not-found" element={<PageSearchNotFound />} />
                 <Route path="*" element={<Page404 />} />
               </Routes>

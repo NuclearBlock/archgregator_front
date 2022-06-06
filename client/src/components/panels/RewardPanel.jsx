@@ -96,6 +96,15 @@ export default function RewardPanel({ data, isLoading }) {
 
                         <TableRow>
                             <TableCell width="40%">
+                                <Hidden xsDown >Rewads </Hidden>Date:
+                            </TableCell>
+                            <TableCell align="left">
+                                {formatDate(data[0].reward_date)}
+                            </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                            <TableCell width="40%">
                                 Rewards type:
                             </TableCell>
                             <TableCell align="left">

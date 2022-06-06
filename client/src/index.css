@@ -285,6 +285,7 @@ footer .footer-icon {
   border: 1px solid #ddd;
   margin: 2px;
   padding: 15px;
+  word-wrap: break-word;
 }
 
 .panel-title {
@@ -300,6 +301,39 @@ footer .footer-icon {
   /* color: #ff5820; */
   color: #666;
   font-size: 0.7rem;
+}
+
+.tx-card {
+  position: relative;
+  border: 1px solid #ddd;
+  margin: 2px;
+  padding: 15px;
+  min-height: 40px;
+}
+
+.tx-card-title {
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  color: #333;
+  font-size: 0.8rem;
+}
+
+.tx-card-value {
+  margin-top: 10px;
+  text-transform: uppercase;
+  color: #ff5820;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.tx-card-success-true {
+  color: green;
+  font-size: 0.9rem;
+}
+
+.tx-card-success-false {
+  color: #999;
+  font-size: 0.9rem;
 }
 
 .circular-progress {

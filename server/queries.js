@@ -343,7 +343,7 @@ const getExecutionsChart = (request, response) => {
 
   const days = request.params.days;
   
-  const queryStr = "SELECT COUNT(tx_hash) AS executions, to_char(executed_at, 'mm/dd/YY') AS date FROM wasm_execute_contract WHERE executed_at > now()::date - 7 GROUP BY date ORDER BY date DESC;";
+  const queryStr = "SELECT COUNT(tx_hash) AS executions, to_char(executed_at, 'mm/dd/YY') AS date FROM wasm_execute_contract WHERE executed_at > now()::date - 7 GROUP BY date ORDER BY date ASC;";
 
     pool.query(queryStr, (error, results) => {
     if (error) {

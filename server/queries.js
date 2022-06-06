@@ -77,9 +77,20 @@ const getCodesRank = (request, response) => {
 }
 
 const getCodeById = (request, response) => {
-  const id = parseInt(request.params.id)
+  const code_id = parseInt(request.params.code_id)
 
-  pool.query('SELECT * FROM wasm_code WHERE code_id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM wasm_code WHERE code_id = $1;', [code_id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getCodeContracts = (request, response) => {
+  const code_id = parseInt(request.params.code_id)
+
+  pool.query('SELECT * FROM wasm_contract WHERE code_id = $1 ORDER BY height DESC;', [code_id], (error, results) => {
     if (error) {
       throw error
     }
@@ -328,6 +339,21 @@ const getRewardsChart = (request, response) => {
 
 }
 
+const getExecutionsChart = (request, response) => {
+
+  const days = request.params.days;
+  
+  const queryStr = "SELECT COUNT(tx_hash) AS executions, to_char(executed_at, 'mm/dd/YY') AS date FROM wasm_execute_contract WHERE executed_at > now()::date - 7 GROUP BY date ORDER BY date DESC;";
+
+    pool.query(queryStr, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+
+}
+
 module.exports = {
     getSearch,
     getContractsCount,
@@ -336,6 +362,7 @@ module.exports = {
     getRewardsToday,
     getCodesRank,
     getCodeById,
+    getCodeContracts,
     getContractsRank,
     getRewardsRank,
     getContractRewards,
@@ -348,5 +375,6 @@ module.exports = {
     getContractExecutionsByPeriod,
     getRewardsRatio,
     getRewardsChart,
+    getExecutionsChart,
   }
 

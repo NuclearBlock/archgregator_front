@@ -14,7 +14,10 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.get('/api/search/:address', db.getSearch)
 
 // Get rewards chart
-app.get('/api/rewardschart', db.getRewardsChart)
+app.get('/api/executionschart/:days', db.getExecutionsChart)
+
+// Get rewards chart
+// app.get('/api/rewardschart', db.getRewardsChart)
 
 // Get rewards ratio
 app.get('/api/rewardsratio', db.getRewardsRatio)
@@ -49,6 +52,9 @@ app.get('/api/contracts/:address', db.getContractInfo)
 // Get contract summary
 app.get('/api/contractsummary/:address', db.getContractSummary)
 
+// Get codes relative contracts
+app.get('/api/codecontracts/:code_id', db.getCodeContracts)
+
 // Get wasm contract metadata
 app.get('/api/contracts/metadata/:address', db.getContractMetadata)
 
@@ -65,7 +71,7 @@ app.get('/api/executionscount/:address/:limit', db.getContractExecutionsByPeriod
 app.get('/api/codes', db.getCodesRank)
 
 // Get wasm code by CodeID
-app.get('/api/codes/:id', db.getCodeById)
+app.get('/api/codes/:code_id', db.getCodeById)
 
 app.get("/api", (request, response) => {
     response.json({ message: "Hello from Archgregator!" });

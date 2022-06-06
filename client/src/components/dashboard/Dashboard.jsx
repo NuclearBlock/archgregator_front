@@ -69,7 +69,8 @@ export default function Dashboard() {
             fetch('/api/rewards/?type=3&limit=5'),
             fetch('/api/contracts/?limit=5'),
             fetch('/api/rewardsratio'),
-            fetch('/api/rewardschart'),
+            // fetch('/api/rewardschart'),
+            fetch('/api/executionschart/7'),
         ])
         .then(([res1, res2, res3, res4, res5, res6, res7, res8, res9]) => Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json(), res6.json(), res7.json(), res8.json(), res9.json()]))
         .then(([data1, data2, data3, data4, data5, data6, data7, data8, data9]) => {

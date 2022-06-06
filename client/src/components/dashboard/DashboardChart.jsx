@@ -39,7 +39,7 @@ export default function DashdoardChart({data, isLoading}) {
           <Card variant="outlined" square className={classes.card}>
             <CardContent>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  REWARDS CHART
+                  7 DAY CONTRACT CHART
               </Typography>
 
               {isLoading && <div className="chart-progress">Loading data ...</div>} 
@@ -60,9 +60,13 @@ export default function DashdoardChart({data, isLoading}) {
                 >
                   <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="date" />
-                  <YAxis tick={false} type="number" domain={['auto', 'auto']} />
+                  <YAxis 
+                    tick={false} 
+                    type="number" 
+                    // domain={['auto', 'auto']} 
+                  />
                   <Tooltip />
-                  <Area type="monotone" dataKey="amount" stroke="#ff5820" fill="#f7ab93" />
+                  <Area type="monotone" dataKey="executions" stroke="#ff5820" fill="#f7ab93" />
                 </AreaChart>
               }
             </CardContent>

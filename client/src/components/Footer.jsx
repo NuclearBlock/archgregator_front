@@ -39,18 +39,9 @@ export default function Footer() {
 
                             <hr/>
 
-                            <a href="https://twitter.com/nuclearblockone" target="_blank" class="footer-icon">
-                                <TwitterIcon fontSize="medium" className={classes.icon}/>
-                            </a>
-                            
                             <a href="https://t.me/nuclearblock" target="_blank" class="footer-icon">
                                 <TelegramIcon fontSize="medium" className={classes.icon}/>
                             </a>
-
-                            <a href="https://github.com/nuclearblock" target="_blank" class="footer-icon">
-                                <GitHubIcon fontSize="medium" className={classes.icon}/>
-                            </a>
-
 
                         </div>
 

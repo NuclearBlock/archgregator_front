@@ -105,7 +105,10 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                                     <Hidden xsDown >Wasm</Hidden> code used:
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    #{item.code_id}
+                                                    #
+                                                    <Link to={'/codes/'+item.code_id} className={classes.link}>
+                                                        {item.code_id}
+                                                    </Link>
                                                 </TableCell>
                                             </TableRow>
 
@@ -219,7 +222,7 @@ export default function ComtractInfoPanel({ info, summary, isLoading }) {
                                     Unique Executors
                                 </div>
                                 <div class="value">
-                                {summary[0].unique_executors || "---"}
+                                    {summary[0].unique_executors || "---"}
                                 </div>
                             </div>
                         </Grid>

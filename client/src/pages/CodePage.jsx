@@ -51,7 +51,7 @@ export default function CodePage() {
             <Grid container spacing={0}>
                 <Grid  item xs={12} spacing={0}>           
                     <div className="main-title">
-                        <h1>Rewards Details</h1>
+                        <h1>WASM Code Details</h1>
                     </div>
                 </Grid>
             </Grid>

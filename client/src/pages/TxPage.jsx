@@ -17,6 +17,9 @@ import {
     MsgClearAdmin,
 } from "cosmjs-types/cosmwasm/wasm/v1/tx";
 
+const RPC_NODE = process.env.REACT_APP_RPC_NODE || "https://rpc.torii-1.archway.tech";
+// console.log('RPC_NODE=', RPC_NODE);
+
 const wasmTypes = createWasmAminoConverters();
 /* this contains /ibc.applications.transfer.v1.MsgTransfer */
 let registry = new Registry(defaultStargateTypes);
@@ -46,11 +49,11 @@ export default function TxPage() {
     const fetchData = () => {
         setIsLoading(true);
 
-        CosmWasmClient.connect("https://rpc.torii-1.archway.tech")
+        CosmWasmClient.connect(RPC_NODE)
         .then((response) => response.getTx(tx_hash))
         //.then((response) => response.json)
         .then((data) => {      
-            console.log(data);
+            // console.log(data);
 
             let txLog = data.rawLog;
             if (data.code == 0) {
@@ -61,18 +64,11 @@ export default function TxPage() {
             const parsedMessages = [];
             for (const message of decodedTx.body.messages) {
                 const decodedMsg = registry.decode(message);
-                // for (const msg of decodedMsg.msg) {
-                //     parsedMessages.push(registry.decode(msg))
-                // }
                 parsedMessages.push(decodedMsg);
             }
-            console.log('parsedMessages=', parsedMessages)
 
             const txBody = decodedTx.body;
             const txBodyDecoded = registry.decodeTxBody(txBody);
-            console.log('txBodyDecoded=', txBodyDecoded);
-
-            console.log('decodeTxRaw=', decodedTx)
 
             setData({
                 tx: data,

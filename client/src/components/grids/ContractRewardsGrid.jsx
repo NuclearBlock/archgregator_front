@@ -26,7 +26,7 @@ const rowsPerPage = 50;
 export default function ContractsRewardGrid() {
 
     const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "long", day: "numeric" }
+        const options = { year: "numeric", month: "long", day: "numeric", hour: '2-digit', minute:'2-digit', second: '2-digit' }
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
 

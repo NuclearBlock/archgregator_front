@@ -55,8 +55,8 @@ export default function CopyToClipboard({ textToCopy, notification }) {
 
             <Snackbar
                 anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: 'bottom',
+                    horizontal: 'center',
                 }}
                 open={open}
                 autoHideDuration={1500}

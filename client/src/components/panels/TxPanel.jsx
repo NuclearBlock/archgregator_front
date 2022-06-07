@@ -95,7 +95,7 @@ export default function TxPanel({ data, isLoading }) {
                             <div className="tx-card-value">
                                 {data.tx.code == 0 
                                 ?
-                                <span className="tx-card-success-true">Ok</span>
+                                <span className="tx-card-success-true">Success</span>
                                 :
                                 <span className="tx-card-success-false">Fail</span>
                                 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Container } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import TelegramIcon from '@material-ui/icons/Telegram';
@@ -24,8 +25,10 @@ export default function Footer() {
     return(
 
         <footer className='footer'>
-            <Grid container spacing={0}>
-                
+
+            <Container maxWidth="lg">
+                <Grid container spacing={0}>
+                    
                     <Grid item xs={2} spacing={0}>
                         
                     </Grid>
@@ -47,8 +50,8 @@ export default function Footer() {
 
                     </Grid>
 
-            </Grid>
-
+                </Grid>
+            </Container>
 
         </footer>
     );

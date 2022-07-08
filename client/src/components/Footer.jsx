@@ -26,7 +26,7 @@ export default function Footer() {
 
         <footer className='footer'>
 
-            <Container maxWidth="lg">
+            <Container maxWidth="false">
                 <Grid container spacing={0}>
                     
                     <Grid item xs={2} spacing={0}>

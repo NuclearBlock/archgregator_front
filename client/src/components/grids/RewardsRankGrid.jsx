@@ -46,15 +46,27 @@ const useStyles = makeStyles({
         textAlign: 'right',
     },
     gridOuter: {
-        marginBottom: '5px',
+        margin: '.3rem',
+        // marginBottom: '5px',
         padding: '10px 5px 5px 5px',
         textAlign: 'right',
-        border: '1px solid #eee',
-        // backgroundColor: '#f5f5f5',
+        border: '1px solid #ddd',
+        borderRadius: '4px',
+        backgroundColor: '#fff',
+        // boxShadow: '0 .3rem .6rem 0 rgba(0,0,0,.16)',
     },
     gridcenter: {
         paddingBottom: '3px',
         textAlign: 'center',
+    },
+    tableContainer: {
+        margin: '.3rem',
+        padding: '10px',
+        width: 'inherit',
+        border: '1px solid #ddd',
+        borderRadius: '4px',
+        backgroundColor: '#fff',
+        // boxShadow: '0 .3rem .6rem 0 rgba(0,0,0,.16)',
     },
     switch: {
         marginTop: '20px',
@@ -195,7 +207,6 @@ export default function RewardsRankGrid() {
         <>
         <Grid item xs={12} spacing={0} className={classes.gridOuter}>
             <Grid container>
-                
                 <Grid item sm={6} spacing={0} className={classes.grid}>
                     <Grid container>
 
@@ -277,10 +288,9 @@ export default function RewardsRankGrid() {
         {!data.length && !isLoading && <div className="loading-result">No data found</div>}
 
         {data.length > 0 && (
-            <>
             <Grid item xs={12} spacing={0}>
             
-                <TableContainer className={classes.container}>
+                <TableContainer className={classes.tableContainer}>
                     <Table size="small">
                     <TableHead>
                         <TableRow >
@@ -381,7 +391,7 @@ export default function RewardsRankGrid() {
                 </TableContainer>
 
             </Grid>
-            </>
+
         )}
 
         {isLoading && <div className="circular-progress"><CircularProgress size="4rem" /></div>} 

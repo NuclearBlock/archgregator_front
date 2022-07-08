@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Top from './components/Top'
 import Header from './components/Header'
-import SidePanel from './components/SidePanel'
+import NavPanel from './components/NavPanel'
 import Footer from './components/Footer'
 
 import Dashboard from './components/dashboard/Dashboard'
@@ -48,13 +48,15 @@ function App() {
       <ThemeProvider theme={theme}>
         <Top />
         <Header />
-        <Container maxWidth="lg">
+
+        <nav id="nav-panel">
+          <NavPanel />
+        </nav>
+
+        <div id="content">
           {/* <div className="AppMain"> */}
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={1} lg={1} spacing={0}>
-              <SidePanel />
-            </Grid>
-            <Grid item xs={12} sm={11} spacing={0}>
+            <Grid item sm={12} spacing={0}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/rewards" element={<RewardsRankPage />} />
@@ -72,7 +74,7 @@ function App() {
             </Grid>
           </Grid>
           {/* </div> */}
-        </Container>
+        </div>
         <Footer />
       </ThemeProvider> 
     </div>

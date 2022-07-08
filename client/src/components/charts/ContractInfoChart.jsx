@@ -34,7 +34,7 @@ export default function ContractInfoChart() {
     return (
 
         <>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={180}>
         <>
 
             {isLoading && <div className="linear-progress"><LinearProgress /></div>}
@@ -42,9 +42,8 @@ export default function ContractInfoChart() {
             {data.length == 0 && <div className="chart-loading-result">No data found</div>}
               
             {data.length > 0 &&
+                <ResponsiveContainer>
                 <AreaChart
-                  width={550}
-                  height={170}
                   data={data}
                   margin={{
                     top: 0,
@@ -59,6 +58,7 @@ export default function ContractInfoChart() {
                   <Tooltip />
                   <Area type="monotone" dataKey="executed" stroke="#ff5820" fill="#f7ab93" />
                 </AreaChart>
+                </ResponsiveContainer>
             }
         </>
         </ResponsiveContainer>

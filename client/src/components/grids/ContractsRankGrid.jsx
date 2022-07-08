@@ -28,6 +28,15 @@ const useStyles = makeStyles({
     cell: {
         width: '10px',
     },
+    tableContainer: {
+        margin: '.3rem',
+        padding: '10px',
+        width: 'inherit',
+        border: '1px solid #ddd',
+        borderRadius: '4px',
+        backgroundColor: '#fff',
+        // boxShadow: '0 .3rem .6rem 0 rgba(0,0,0,.16)',
+    },
 });
 
 const rowsPerPage = 50;
@@ -77,7 +86,7 @@ export default function ContractsRankGrid() {
 
             {data.length > 0 && (  
 
-                <TableContainer className={classes.container}>
+                <TableContainer className={classes.tableContainer}>
                     <Table size="small">
                     <TableHead>
                         <TableRow>

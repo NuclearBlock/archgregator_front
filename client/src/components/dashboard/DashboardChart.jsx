@@ -32,46 +32,47 @@ export default function DashdoardChart({data, isLoading}) {
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
 
+    
     return (
 
       <>
-        <ResponsiveContainer width="100%" height="100%">
-          <Card variant="outlined" square className={classes.card}>
-            <CardContent>
-              <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  7 DAY CONTRACT CHART
-              </Typography>
+        
+            <div className="panel dashboard-leaders" style={{width:"100%"}}>
+                <div className="panel-title">
+                    7 DAY CONTRACT CHART
+                </div>
 
-              {isLoading && <div className="chart-progress">Loading data ...</div>} 
+                {isLoading && <div className="chart-progress">Loading data ...</div>} 
 
-              {data.length == 0 && <div className="chart-progress">No data found</div>}
-              
-              {data.length > 0 &&
-                <AreaChart
-                  width={700}
-                  height={280}
-                  data={data}
-                  margin={{
-                    top: 0,
-                    right: 0,
-                    left: -40,
-                    bottom: 0,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="5 5" />
-                  <XAxis dataKey="date" />
-                  <YAxis 
-                    tick={false} 
-                    type="number" 
-                    // domain={['auto', 'auto']} 
-                  />
-                  <Tooltip />
-                  <Area type="monotone" dataKey="executions" stroke="#ff5820" fill="#f7ab93" />
-                </AreaChart>
-              }
-            </CardContent>
-          </Card>
-        </ResponsiveContainer>
+                {data.length == 0 && <div className="chart-progress">No data found</div>}
+                
+                {data.length > 0 &&
+                    <ResponsiveContainer width="100%">
+                        <AreaChart
+                        
+                        data={data}
+                        margin={{
+                            top: 0,
+                            right: 0,
+                            left: -40,
+                            bottom: 30,
+                        }}
+                        >
+                        <CartesianGrid strokeDasharray="5 5" />
+                        <XAxis dataKey="date" />
+                        <YAxis 
+                            tick={false} 
+                            type="number" 
+                            // domain={['auto', 'auto']} 
+                        />
+                        <Tooltip />
+                        <Area type="monotone" dataKey="executions" stroke="#ff5820" fill="#f7ab93" />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                }
+
+            </div>
+        
       </>
 
 

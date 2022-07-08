@@ -14,7 +14,7 @@ export default function DashdoardRewardsRank({data, isLoading}) {
 
     return (
 
-        <div className="dashboard-leaders">
+        <div className="panel dashboard-leaders">
 
             <div className='panel-title'>
                 Current reward leaders

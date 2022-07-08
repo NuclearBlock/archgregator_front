@@ -57,7 +57,7 @@ export default function Header() {
 
     <header>
       
-            <Container maxWidth="lg">
+            <Container maxWidth="false">
                 <Grid container >
                     <Grid item xs={4} sm={3}>
                         <div id="logo">

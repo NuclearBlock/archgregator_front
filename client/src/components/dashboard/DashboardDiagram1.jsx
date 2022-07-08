@@ -69,16 +69,17 @@ const useStyles = makeStyles({
   return (
     <>
     <ResponsiveContainer width="100%" height="100%">
-        <Card variant="outlined" square className={classes.card}>
-            <Typography className={classes.title} color="Primary" gutterBottom>
-                REWARDS TYPE RATIO
-            </Typography>
+        <div className="panel dashboard-leaders">
+            <div className="panel-title">
+                Rewards type ratio
+            </div>
 
             {isLoading && <div class="dashboard-progress"><CircularProgress size="4rem" /></div>} 
 
             {data.length > 0 &&
               <div>
-                <PieChart width={370} height={220}>
+                
+                <PieChart width={370} height={220} style={{margin:"auto"}}>
                     <Pie
                         data={convertData(data[0])}
                         cx="50%"
@@ -101,7 +102,7 @@ const useStyles = makeStyles({
                 <div className="pie-subsidies"><span></span> Subsidized</div>
               </div>
             }
-        </Card>  
+        </div>  
       </ResponsiveContainer>
       
     </>

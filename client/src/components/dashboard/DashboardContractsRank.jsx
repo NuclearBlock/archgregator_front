@@ -45,7 +45,7 @@ export default function DashdoardContractsRank({data, isLoading}) {
 
     return (
 
-        <div className="dashboard-leaders">
+        <div className="panel dashboard-leaders">
 
             <div className='panel-title'>
                 MOST EXECUTABLE CONTRACTS
